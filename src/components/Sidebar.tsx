@@ -191,7 +191,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </div>
           <div>
             <div className="flex items-baseline gap-1.5">
-              <h1 className="text-lg font-bold tracking-tight text-white font-display" style={{ fontFamily: 'var(--font-display)', margin: 0 }}>Scribblit</h1>
+              <h1 className="text-lg font-bold tracking-tight text-white font-display" style={{ fontFamily: 'var(--font-display)', margin: 0 }}>Smarana (स्मरण)</h1>
             </div>
             <p className="text-[10px] text-[var(--text-muted)] font-semibold uppercase tracking-wider">Your Second Brain</p>
           </div>

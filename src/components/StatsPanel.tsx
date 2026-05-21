@@ -83,7 +83,7 @@ export const StatsPanel: React.FC<StatsPanelProps> = ({
       
       {/* Page Header */}
       <div>
-        <h2 className="text-xl font-bold tracking-tight text-white font-display" style={{ fontFamily: 'var(--font-display)' }}>Scribblit Control Dashboard</h2>
+        <h2 className="text-xl font-bold tracking-tight text-white font-display" style={{ fontFamily: 'var(--font-display)' }}>Smarana Control Dashboard</h2>
         <p className="text-xs text-[var(--text-muted)]">Manage your knowledge networks, analytics, and collaborative workspaces.</p>
       </div>
 

@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { 
-  FileText, Users, ChevronDown, Underline, Bold, Italic, 
+  FileText, ChevronDown, Underline, Bold, Italic, 
   Strikethrough, List, AlignCenter, Moon, Sun, Shield, Scale, 
-  TrendingDown, XCircle, Sparkles, Save, Pencil, Compass, 
+  XCircle, Sparkles, Save, Pencil, Compass, 
   Zap, ArrowRight, Check, Sparkle
 } from 'lucide-react';
 
@@ -29,7 +29,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 
   // Mock Editor interactive states
   const [editorText, setEditorText] = useState(
-    "Scribblit allows me to write down thoughts instantly, organize them with smart tags, and view connections in a Knowledge Graph. Connecting ideas helps me gain clarity and never lose inspiration."
+    "Smarana allows me to write down thoughts instantly, organize them with smart tags, and view connections in a Knowledge Graph. Connecting ideas helps me gain clarity and never lose inspiration."
   );
   const [editorFont, setEditorFont] = useState<'sans' | 'serif' | 'display'>('sans');
   const [editorBold, setEditorBold] = useState(false);
@@ -41,16 +41,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
   const [isSummarizing, setIsSummarizing] = useState(false);
   const [aiSummaryResult, setAiSummaryResult] = useState<string[] | null>(null);
 
-  // Animated numbers count
-  const [userCount, setUserCount] = useState(98400);
 
-  useEffect(() => {
-    // Slowly increment users count for premium live feel
-    const interval = setInterval(() => {
-      setUserCount(prev => prev + Math.floor(Math.random() * 3) + 1);
-    }, 4000);
-    return () => clearInterval(interval);
-  }, []);
 
   const handleAiSummary = () => {
     if (isSummarizing) return;
@@ -71,7 +62,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
   const handleSaveMockNote = () => {
     // Generate a title based on the first few words
     const titleWords = editorText.split(' ').slice(0, 5).join(' ');
-    const title = titleWords.length > 3 ? `${titleWords}...` : "Scribblit Quick Capture";
+    const title = titleWords.length > 3 ? `${titleWords}...` : "Smarana Quick Capture";
     const tags = ['Intro', 'Demo', 'Capture'];
     onSaveNoteAndLaunch(title, editorText, tags);
   };
@@ -84,13 +75,13 @@ export const LandingPage: React.FC<LandingPageProps> = ({
         <div className="flex items-center justify-between px-6 py-3">
           <a className="flex items-center gap-2" href="#" onClick={(e) => e.preventDefault()}>
             <FileText className="h-6 w-6 text-foreground" />
-            <span className="font-display text-xl font-bold text-foreground tracking-tight">Scribblit</span>
+            <span className="font-display text-xl font-bold text-foreground tracking-tight">Smarana (स्मरण)</span>
           </a>
           
           <nav aria-label="Main navigation" className="hidden items-center gap-8 md:flex">
             <a className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground" href="#features">Features</a>
-            <a className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground" href="#platforms">Platforms</a>
-            <a className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground" href="#pricing">Pricing</a>
+            <a className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground" href="#architecture">Architecture</a>
+            <a className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground" href="#why-smarana">Open Source</a>
           </nav>
           
           <div className="flex items-center gap-3">
@@ -131,9 +122,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               
               {/* Trust Badge */}
               <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-border bg-secondary/80 px-4 py-1.5 backdrop-blur-sm">
-                <Users className="h-3.5 w-3.5 text-muted-foreground" />
+                <Shield className="h-3.5 w-3.5 text-muted-foreground" />
                 <span className="text-xs font-semibold text-muted-foreground tracking-wide font-display">
-                  +{userCount.toLocaleString()} active minds online
+                  100% Client-Side &amp; Private
                 </span>
               </div>
 
@@ -147,12 +138,12 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                   textDecoration: `${isUnderline ? 'underline' : ''} ${isStrikethrough ? 'line-through' : ''}`.trim() || 'none'
                 }}
               >
-                Ideas. Notes. Clarity.<br />Wherever your mind goes.
+                Ideas. Notes. Recall.<br />Your Personal Second Brain.
               </h1>
 
               {/* Tagline Subtitle Description */}
               <p className="mt-4 max-w-xl leading-relaxed text-muted-foreground text-sm md:text-base tracking-normal">
-                Combine note-taking, idea tracking, and daily planning in one smart notebook — ready whenever inspiration hits.
+                A 100% local-first browser workspace for capturing thoughts, linking concepts with knowledge graphs, and using spaced repetition.
               </p>
 
               {/* Interactive Editor Formatting Toolbar Mockup */}
@@ -261,15 +252,15 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                   onClick={onLaunchApp}
                   className="rounded-full bg-primary text-primary-foreground px-7 py-3 text-sm font-semibold transition-opacity hover:opacity-90 shadow-md font-display flex items-center gap-1.5"
                 >
-                  Launch App Dashboard
+                  Launch Web App
                   <ArrowRight size={14} />
                 </button>
-                <button 
-                  onClick={onLaunchApp}
-                  className="rounded-full border border-border bg-secondary/40 text-foreground px-7 py-3 text-sm font-medium transition-colors hover:bg-secondary/70 font-display"
+                <a 
+                  href="#architecture"
+                  className="rounded-full border border-border bg-secondary/40 text-foreground px-7 py-3 text-sm font-medium transition-colors hover:bg-secondary/70 font-display inline-flex items-center"
                 >
-                  Start Free Trial
-                </button>
+                  View Architecture
+                </a>
               </div>
 
             </div>
@@ -281,19 +272,19 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-8 px-6 md:gap-14">
             <div className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors duration-300">
               <Shield className="h-4 w-4" />
-              <span className="text-sm font-semibold tracking-wide">No Setup Fee</span>
+              <span className="text-sm font-semibold tracking-wide">100% Data Privacy</span>
             </div>
             <div className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors duration-300">
               <Scale className="h-4 w-4" />
-              <span className="text-sm font-semibold tracking-wide">100% Data Ownership</span>
+              <span className="text-sm font-semibold tracking-wide">100% Free &amp; Open Source</span>
             </div>
             <div className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors duration-300">
-              <TrendingDown className="h-4 w-4" />
-              <span className="text-sm font-semibold tracking-wide">80%+ Reduced Cognitive Load</span>
+              <Zap className="h-4 w-4" />
+              <span className="text-sm font-semibold tracking-wide">Offline-First Support</span>
             </div>
             <div className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors duration-300">
               <XCircle className="h-4 w-4" />
-              <span className="text-sm font-semibold tracking-wide">Cancel Anytime</span>
+              <span className="text-sm font-semibold tracking-wide">No Accounts Required</span>
             </div>
           </div>
         </section>
@@ -306,7 +297,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                 Notes that work the way you think.
               </h2>
               <p className="mt-4 text-base text-muted-foreground leading-relaxed">
-                Notes shouldn't feel messy or scattered. With Scribblit, every thought flows into an organized system that adapts to your style, builds semantic graphs, and keeps your memory fresh.
+                Notes shouldn't feel messy or scattered. With Smarana, every thought flows into an organized system that adapts to your style, builds semantic graphs, and keeps your memory fresh.
               </p>
             </div>
             <div className="flex-shrink-0">
@@ -410,7 +401,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                   <div className="flex items-center gap-2 mb-3">
                     <Sparkles className="h-4 w-4 text-purple-400 animate-pulse" />
                     <span className="text-xs font-bold uppercase tracking-wider text-purple-400 font-display">
-                      Scribblit AI Summary
+                      Smarana AI Summary
                     </span>
                   </div>
 
@@ -456,91 +447,94 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           </div>
         </section>
 
-        {/* Platforms Grid Section */}
-        <section id="platforms" className="bg-card/20 py-20 md:py-28">
+        {/* Local-First Architecture Section */}
+        <section id="architecture" className="bg-card/20 py-20 md:py-28">
           <div className="max-w-6xl mx-auto px-6">
             
             <div className="mb-14 max-w-xl">
-              <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-2">Sync Anywhere</p>
+              <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-2">Local Architecture</p>
               <h2 className="font-display text-3xl font-extrabold tracking-tight text-foreground md:text-4xl">
-                Clarity. Wherever your mind goes.
+                Privacy, Speed, and Autonomy.
               </h2>
             </div>
 
             <div className="grid gap-6 sm:grid-cols-2">
               
-              {/* Platform 1 - Android */}
+              {/* Architecture 1 - Browser Cache Storage */}
               <div className="group overflow-hidden rounded-2xl border border-border bg-card hover:border-foreground/20 hover:shadow-lg transition-all duration-300">
-                <div className="relative aspect-[16/10] overflow-hidden bg-secondary/50 flex-center p-6">
-                  {/* Premium Vector SVG Mockup instead of missing image */}
+                <div className="relative aspect-[16/10] overflow-hidden bg-secondary/50 flex items-center justify-center p-6">
                   <svg className="w-4/5 h-4/5 text-muted-foreground opacity-60 group-hover:scale-105 group-hover:opacity-80 transition-all duration-500" viewBox="0 0 100 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="35" y="5" width="30" height="50" rx="4" stroke="currentColor" strokeWidth="2" />
-                    <circle cx="50" cy="50" r="2" fill="currentColor" />
-                    <line x1="45" y1="8" x2="55" y2="8" stroke="currentColor" strokeWidth="1" />
-                    <path d="M 40 18 H 60 M 40 26 H 60 M 40 34 H 52" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                    <rect x="52" y="32" width="8" height="8" rx="1" fill="currentColor" opacity="0.2" />
+                    <rect x="25" y="10" width="50" height="40" rx="3" stroke="currentColor" strokeWidth="2" />
+                    <line x1="25" y1="20" x2="75" y2="20" stroke="currentColor" strokeWidth="1.5" />
+                    <circle cx="32" cy="15" r="1.5" fill="currentColor" />
+                    <circle cx="38" cy="15" r="1.5" fill="currentColor" />
+                    <circle cx="44" cy="15" r="1.5" fill="currentColor" />
+                    <path d="M 32 30 H 68 M 32 38 H 56" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                    <rect x="62" y="32" width="6" height="6" rx="1" fill="currentColor" opacity="0.2" />
                   </svg>
                 </div>
                 <div className="px-6 py-5 border-t border-border">
-                  <h3 className="font-display text-lg font-bold text-foreground">Scribblit for Android</h3>
+                  <h3 className="font-display text-lg font-bold text-foreground">Browser Cache Storage</h3>
                   <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                    Take notes on the go with fast, secure sync across all your devices. Capture thoughts instantly and access them offline.
+                    All captured memos, web clippings, and tags are stored directly in your browser's sandboxed local storage. No external databases, servers, or registrations required.
                   </p>
                 </div>
               </div>
 
-              {/* Platform 2 - iOS */}
+              {/* Architecture 2 - Local Spaced Repetition */}
               <div className="group overflow-hidden rounded-2xl border border-border bg-card hover:border-foreground/20 hover:shadow-lg transition-all duration-300">
-                <div className="relative aspect-[16/10] overflow-hidden bg-secondary/50 flex-center p-6">
+                <div className="relative aspect-[16/10] overflow-hidden bg-secondary/50 flex items-center justify-center p-6">
                   <svg className="w-4/5 h-4/5 text-muted-foreground opacity-60 group-hover:scale-105 group-hover:opacity-80 transition-all duration-500" viewBox="0 0 100 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="36" y="7" width="28" height="46" rx="5" stroke="currentColor" strokeWidth="2" />
-                    <line x1="48" y1="9" x2="52" y2="9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                    <path d="M 42 16 H 58 M 42 22 H 58 M 42 28 H 58" stroke="currentColor" strokeWidth="1" strokeLinecap="round" />
-                    <rect x="42" y="34" width="16" height="12" rx="2" stroke="currentColor" strokeWidth="1.5" strokeDasharray="2 2" />
+                    <circle cx="50" cy="30" r="18" stroke="currentColor" strokeWidth="2" strokeDasharray="3 3" />
+                    <path d="M 50 18 V 30 L 58 34" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                    <circle cx="50" cy="30" r="4" fill="currentColor" opacity="0.2" />
+                    <path d="M 35 42 L 40 47 L 50 35" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" opacity="0.4" />
                   </svg>
                 </div>
                 <div className="px-6 py-5 border-t border-border">
-                  <h3 className="font-display text-lg font-bold text-foreground">Scribblit for iOS</h3>
+                  <h3 className="font-display text-lg font-bold text-foreground">Client-Side Spaced Repetition</h3>
                   <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                    Jot down notes, organize with folders, and collaborate on shared projects — all from your iPhone or iPad with widget support.
+                    Built-in local execution of Piotr Wozniak's SM-2 learning algorithm calculates optimal intervals for your reviews, helping you retain knowledge on your terms.
                   </p>
                 </div>
               </div>
 
-              {/* Platform 3 - Desktop */}
+              {/* Architecture 3 - Local Knowledge Mapping */}
               <div className="group overflow-hidden rounded-2xl border border-border bg-card hover:border-foreground/20 hover:shadow-lg transition-all duration-300">
-                <div className="relative aspect-[16/10] overflow-hidden bg-secondary/50 flex-center p-6">
+                <div className="relative aspect-[16/10] overflow-hidden bg-secondary/50 flex items-center justify-center p-6">
                   <svg className="w-4/5 h-4/5 text-muted-foreground opacity-60 group-hover:scale-105 group-hover:opacity-80 transition-all duration-500" viewBox="0 0 100 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="15" y="10" width="70" height="36" rx="2" stroke="currentColor" strokeWidth="2" />
-                    <path d="M 40 46 L 35 52 H 65 L 60 46 Z" fill="currentColor" opacity="0.3" stroke="currentColor" strokeWidth="2" />
-                    <line x1="30" y1="52" x2="70" y2="52" stroke="currentColor" strokeWidth="2.5" />
-                    <path d="M 22 18 H 45 M 22 24 H 40 M 22 30 H 45" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                    <circle cx="65" cy="24" r="6" stroke="currentColor" strokeWidth="1.5" />
-                    <line x1="70" y1="29" x2="76" y2="35" stroke="currentColor" strokeWidth="1.5" />
+                    <circle cx="30" cy="20" r="5" stroke="currentColor" strokeWidth="1.5" />
+                    <circle cx="70" cy="25" r="7" stroke="currentColor" strokeWidth="1.5" />
+                    <circle cx="50" cy="45" r="6" stroke="currentColor" strokeWidth="1.5" />
+                    <line x1="35" y1="21" x2="63" y2="24" stroke="currentColor" strokeWidth="1" strokeDasharray="2 2" />
+                    <line x1="33" y1="24" x2="46" y2="41" stroke="currentColor" strokeWidth="1.5" />
+                    <line x1="66" y1="29" x2="54" y2="41" stroke="currentColor" strokeWidth="1.5" />
                   </svg>
                 </div>
                 <div className="px-6 py-5 border-t border-border">
-                  <h3 className="font-display text-lg font-bold text-foreground">Scribblit for Windows / Linux</h3>
+                  <h3 className="font-display text-lg font-bold text-foreground">Local Knowledge Mapping</h3>
                   <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                    Work smarter on desktop. Enjoy keyboard shortcuts, offline editing, window snapping, and distraction-free writing.
+                    Memos form a semantic network entirely on your device. The dashboard automatically calculates entity relationships and builds your interactive knowledge graph.
                   </p>
                 </div>
               </div>
 
-              {/* Platform 4 - Web */}
+              {/* Architecture 4 - Local RAG AI Assistance */}
               <div className="group overflow-hidden rounded-2xl border border-border bg-card hover:border-foreground/20 hover:shadow-lg transition-all duration-300">
-                <div className="relative aspect-[16/10] overflow-hidden bg-secondary/50 flex-center p-6">
+                <div className="relative aspect-[16/10] overflow-hidden bg-secondary/50 flex items-center justify-center p-6">
                   <svg className="w-4/5 h-4/5 text-muted-foreground opacity-60 group-hover:scale-105 group-hover:opacity-80 transition-all duration-500" viewBox="0 0 100 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="50" cy="30" r="22" stroke="currentColor" strokeWidth="2" strokeDasharray="6 2" />
-                    <path d="M 38 30 H 62 M 50 18 V 42" stroke="currentColor" strokeWidth="1" opacity="0.4" />
-                    <rect x="42" y="24" width="16" height="12" rx="2" fill="var(--background)" stroke="currentColor" strokeWidth="2" />
-                    <path d="M 47 30 L 53 30" stroke="currentColor" strokeWidth="1.5" />
+                    <path d="M 25 15 H 75 V 40 H 45 L 35 48 V 40 H 25 Z" stroke="currentColor" strokeWidth="2" />
+                    <circle cx="42" cy="28" r="1.5" fill="currentColor" />
+                    <circle cx="50" cy="28" r="1.5" fill="currentColor" />
+                    <circle cx="58" cy="28" r="1.5" fill="currentColor" />
+                    <path d="M 70 20 L 78 12 H 88" stroke="currentColor" strokeWidth="1" />
+                    <path d="M 84 8 L 88 12 L 84 16" stroke="currentColor" strokeWidth="1" />
                   </svg>
                 </div>
                 <div className="px-6 py-5 border-t border-border">
-                  <h3 className="font-display text-lg font-bold text-foreground">Scribblit for Web</h3>
+                  <h3 className="font-display text-lg font-bold text-foreground">Client-Side RAG AI Assistance</h3>
                   <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                    Access your notes anywhere. A lightweight, lightning-fast web app optimized for speed that loads in under 3 seconds.
+                    Query your second brain using localized natural language processing. Find facts, summarize articles, and trace semantic connections completely offline.
                   </p>
                 </div>
               </div>
@@ -549,154 +543,65 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           </div>
         </section>
 
-        {/* Pricing Plans Section */}
-        <section id="pricing" className="py-20 md:py-28 max-w-5xl mx-auto px-6">
+        {/* Open Source / Free Showcase Section */}
+        <section id="why-smarana" className="py-20 md:py-28 max-w-5xl mx-auto px-6">
           <div className="mb-16 text-center">
-            <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-3">Pricing</p>
+            <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-3">Open Source &amp; Free</p>
             <h2 className="font-display text-3xl font-extrabold tracking-tight text-foreground md:text-4xl text-balance">
-              Choose your pricing plan
+              100% Privacy. Zero Cost.
             </h2>
             <p className="mx-auto mt-4 max-w-md text-sm text-muted-foreground leading-relaxed">
-              Keep your notes organized, clear, and easy to find. Every thought flows into a system that adapts to your style.
+              No subscription tiers. No cloud telemetry. Your memories are yours to keep, forever.
             </p>
           </div>
 
-          <div className="grid gap-6 md:grid-cols-3 items-stretch">
+          <div className="glass-panel rounded-3xl border border-border bg-card/40 p-8 md:p-12 shadow-xl relative overflow-hidden">
+            {/* Soft decorative background glow */}
+            <div className="absolute top-0 right-0 w-72 h-72 bg-primary/5 rounded-full blur-[80px] pointer-events-none" />
             
-            {/* Free Plan */}
-            <div className="group relative flex flex-col rounded-2xl border border-border bg-card/60 text-foreground hover:border-foreground/20 hover:shadow-lg transition-all duration-300">
-              <div className="flex flex-1 flex-col p-7">
-                <p className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Free</p>
-                <div className="mt-3 flex items-baseline gap-1.5">
-                  <span className="font-display text-4xl font-extrabold tracking-tight">$0</span>
-                  <span className="text-xs font-medium text-muted-foreground">forever</span>
-                </div>
-                <p className="mt-3 text-xs text-muted-foreground">For casual note-takers getting started.</p>
-                
-                <div className="my-6 h-px bg-border" />
-                
-                <ul className="flex-1 space-y-3.5">
+            <div className="grid gap-8 md:grid-cols-2 items-center relative z-10">
+              <div>
+                <h3 className="font-display text-2xl font-bold text-foreground mb-4">
+                  Why Smarana is fully free
+                </h3>
+                <p className="text-sm text-muted-foreground leading-relaxed mb-6">
+                  Smarana is built on local-first web standards. Because all caching, semantic analysis, and spaced repetition calculations run directly in your own browser, there are no expensive hosting servers to maintain.
+                </p>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  This architecture ensures your notes remain private, load instantly, work offline, and cost nothing to run or scale.
+                </p>
+              </div>
+
+              <div className="space-y-4 border-t border-border pt-6 md:border-t-0 md:pt-0 md:pl-8 md:border-l">
+                <h4 className="text-xs font-bold uppercase tracking-widest text-foreground mb-2">Smarana Core Values</h4>
+                <ul className="space-y-3.5">
                   <li className="list-check-item text-xs text-muted-foreground">
                     <Check size={14} className="text-foreground/70 mt-0.5" />
-                    <span>Up to 50 notes</span>
+                    <span>Complete data sovereignty (export as JSON anytime)</span>
                   </li>
                   <li className="list-check-item text-xs text-muted-foreground">
                     <Check size={14} className="text-foreground/70 mt-0.5" />
-                    <span>Basic search &amp; tagging</span>
+                    <span>Zero third-party trackers or telemetry tools</span>
                   </li>
                   <li className="list-check-item text-xs text-muted-foreground">
                     <Check size={14} className="text-foreground/70 mt-0.5" />
-                    <span>Single device access</span>
+                    <span>Private RAG search running completely client-side</span>
                   </li>
                   <li className="list-check-item text-xs text-muted-foreground">
                     <Check size={14} className="text-foreground/70 mt-0.5" />
-                    <span>Community support</span>
+                    <span>No passwords, login credentials, or emails required</span>
                   </li>
                 </ul>
 
                 <button 
                   onClick={onLaunchApp}
-                  className="mt-8 w-full flex items-center justify-center gap-1.5 rounded-xl border border-border bg-transparent text-foreground hover:bg-foreground hover:text-primary-foreground py-3 text-sm font-bold transition-all"
+                  className="mt-6 flex items-center justify-center gap-1.5 rounded-full bg-primary text-primary-foreground px-6 py-2.5 text-xs font-bold transition-all hover:opacity-90 shadow-md"
                 >
-                  Get Started
-                  <ArrowRight size={14} />
+                  Start Capturing Now
+                  <ArrowRight size={12} />
                 </button>
               </div>
             </div>
-
-            {/* Pro Plan (Highlighted Card) */}
-            <div className="group relative flex flex-col rounded-2xl border border-foreground bg-foreground text-primary-foreground shadow-2xl md:-my-4 md:py-4 transition-all duration-300">
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-primary-foreground px-4 py-1 text-[10px] font-bold uppercase tracking-widest text-primary border border-foreground/10">
-                Most Popular
-              </div>
-              <div className="flex flex-1 flex-col p-7">
-                <p className="text-sm font-semibold uppercase tracking-wider text-primary-foreground/60">Pro</p>
-                <div className="mt-3 flex items-baseline gap-1.5">
-                  <span className="font-display text-4xl font-extrabold tracking-tight">$69</span>
-                  <span className="text-xs font-medium text-primary-foreground/50">/year</span>
-                </div>
-                <p className="mt-3 text-xs text-primary-foreground/60">For power users who need more capacity.</p>
-                
-                <div className="my-6 h-px bg-primary-foreground/10" />
-                
-                <ul className="flex-1 space-y-3.5">
-                  <li className="list-check-item text-xs text-primary-foreground/80">
-                    <Check size={14} className="text-primary-foreground mt-0.5" />
-                    <span>Unlimited notes &amp; notebooks</span>
-                  </li>
-                  <li className="list-check-item text-xs text-primary-foreground/80">
-                    <Check size={14} className="text-primary-foreground mt-0.5" />
-                    <span>Advanced search &amp; tagging</span>
-                  </li>
-                  <li className="list-check-item text-xs text-primary-foreground/80">
-                    <Check size={14} className="text-primary-foreground mt-0.5" />
-                    <span>Real-time collaboration</span>
-                  </li>
-                  <li className="list-check-item text-xs text-primary-foreground/80">
-                    <Check size={14} className="text-primary-foreground mt-0.5" />
-                    <span>Cloud sync across devices</span>
-                  </li>
-                  <li className="list-check-item text-xs text-primary-foreground/80">
-                    <Check size={14} className="text-primary-foreground mt-0.5" />
-                    <span>Priority email support</span>
-                  </li>
-                </ul>
-
-                <button 
-                  onClick={onLaunchApp}
-                  className="mt-8 w-full flex items-center justify-center gap-1.5 rounded-xl bg-primary-foreground text-foreground hover:bg-primary-foreground/90 py-3 text-sm font-bold transition-all shadow-md"
-                >
-                  Upgrade to Pro
-                  <ArrowRight size={14} />
-                </button>
-              </div>
-            </div>
-
-            {/* Vision Pro Plan */}
-            <div className="group relative flex flex-col rounded-2xl border border-border bg-card/60 text-foreground hover:border-foreground/20 hover:shadow-lg transition-all duration-300">
-              <div className="flex flex-1 flex-col p-7">
-                <p className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Vision Pro</p>
-                <div className="mt-3 flex items-baseline gap-1.5">
-                  <span className="font-display text-4xl font-extrabold tracking-tight">$149</span>
-                  <span className="text-xs font-medium text-muted-foreground">/year</span>
-                </div>
-                <p className="mt-3 text-xs text-muted-foreground">For teams that think and work together.</p>
-                
-                <div className="my-6 h-px bg-border" />
-                
-                <ul className="flex-1 space-y-3.5">
-                  <li className="list-check-item text-xs text-muted-foreground">
-                    <Check size={14} className="text-foreground/70 mt-0.5" />
-                    <span>Everything in Pro plan</span>
-                  </li>
-                  <li className="list-check-item text-xs text-muted-foreground">
-                    <Check size={14} className="text-foreground/70 mt-0.5" />
-                    <span>Team workspaces &amp; settings</span>
-                  </li>
-                  <li className="list-check-item text-xs text-muted-foreground">
-                    <Check size={14} className="text-foreground/70 mt-0.5" />
-                    <span>Admin roles &amp; permissions</span>
-                  </li>
-                  <li className="list-check-item text-xs text-muted-foreground">
-                    <Check size={14} className="text-foreground/70 mt-0.5" />
-                    <span>Dedicated support manager</span>
-                  </li>
-                  <li className="list-check-item text-xs text-muted-foreground">
-                    <Check size={14} className="text-foreground/70 mt-0.5" />
-                    <span>Custom integrations API</span>
-                  </li>
-                </ul>
-
-                <button 
-                  onClick={onLaunchApp}
-                  className="mt-8 w-full flex items-center justify-center gap-1.5 rounded-xl border border-border bg-transparent text-foreground hover:bg-foreground hover:text-primary-foreground py-3 text-sm font-bold transition-all"
-                >
-                  Contact Sales
-                  <ArrowRight size={14} />
-                </button>
-              </div>
-            </div>
-
           </div>
         </section>
 
@@ -803,7 +708,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               How You Take Notes?
             </h2>
             <p className="mx-auto mt-4 max-w-md text-sm text-muted-foreground leading-relaxed relative z-10">
-              Start Using Scribblit to capture your thoughts instantly, link concepts, and remember everything effortlessly.
+              Start using Smarana to capture your thoughts instantly, link concepts, and remember everything effortlessly.
             </p>
             
             <div className="relative z-10 mt-8 flex flex-wrap items-center justify-center gap-4">
@@ -811,7 +716,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                 onClick={onLaunchApp}
                 className="rounded-full bg-foreground text-background px-7 py-3 text-sm font-semibold transition-opacity hover:opacity-90 shadow-md font-display"
               >
-                Launch Scribblit Web App
+                Launch Smarana Web App
               </button>
               <button 
                 onClick={onLaunchApp}
@@ -832,13 +737,13 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           <div className="flex flex-col gap-3">
             <div className="flex items-center gap-2">
               <FileText className="h-5 w-5 text-foreground" />
-              <span className="font-display text-lg font-bold text-foreground tracking-tight">Scribblit</span>
+              <span className="font-display text-lg font-bold text-foreground tracking-tight">Smarana (स्मरण)</span>
             </div>
             <p className="text-xs text-muted-foreground">
               Smart notebook for ideas, notes, and daily planning. Build your second brain.
             </p>
             <p className="text-[11px] text-muted-foreground mt-2">
-              &copy; {new Date().getFullYear()} Scribblit Inc. All rights reserved.
+              &copy; {new Date().getFullYear()} Smarana. All rights reserved.
             </p>
           </div>
 
@@ -846,8 +751,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             <h4 className="font-bold text-foreground mb-3 text-xs uppercase tracking-wider font-display">Product</h4>
             <ul className="space-y-2 text-xs">
               <li><a href="#features" className="hover:text-foreground">Features</a></li>
-              <li><a href="#platforms" className="hover:text-foreground">Platforms</a></li>
-              <li><a href="#pricing" className="hover:text-foreground">Pricing</a></li>
+              <li><a href="#architecture" className="hover:text-foreground">Architecture</a></li>
+              <li><a href="#why-smarana" className="hover:text-foreground">Open Source</a></li>
             </ul>
           </div>
 

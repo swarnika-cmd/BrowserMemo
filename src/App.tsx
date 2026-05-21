@@ -28,7 +28,7 @@ function App() {
   // 1. Core State
   const [showDashboard, setShowDashboard] = useState(false);
   const [theme, setTheme] = useState<'dark' | 'light'>(() => {
-    return (localStorage.getItem('scribblit_theme') as 'dark' | 'light') || 'dark';
+    return (localStorage.getItem('smarana_theme') as 'dark' | 'light') || 'dark';
   });
 
   const [memories, setMemories] = useState<Memory[]>([]);
@@ -52,7 +52,7 @@ function App() {
 
   // Sync theme with DOM class
   useEffect(() => {
-    localStorage.setItem('scribblit_theme', theme);
+    localStorage.setItem('smarana_theme', theme);
     if (theme === 'light') {
       document.documentElement.classList.add('light');
     } else {
