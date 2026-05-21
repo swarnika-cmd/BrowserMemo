@@ -79,60 +79,72 @@ export const StatsPanel: React.FC<StatsPanelProps> = ({
   const activeWorkspace = workspaces.find(w => w.name === currentWorkspace) || workspaces[0];
 
   return (
-    <div className="flex-1 overflow-y-auto p-6 bg-[#030406] h-full flex flex-col gap-6">
+    <div className="flex-1 overflow-y-auto p-6 bg-zinc-950 h-full flex flex-col gap-6">
       
       {/* Page Header */}
       <div>
-        <h2 className="text-xl font-bold tracking-tight text-white">ORMA Control Dashboard</h2>
+        <h2 className="text-xl font-bold tracking-tight text-white" style={{ fontFamily: 'var(--font-heading)' }}>Surata Control Dashboard</h2>
         <p className="text-xs text-[var(--text-muted)]">Manage your knowledge networks, analytics, and collaborative workspaces.</p>
       </div>
 
       {/* Grid 1: Analytics Row */}
       <div className="grid grid-cols-4 gap-4">
         {/* Total Memories */}
-        <div className="glass-panel p-4 bg-[rgba(16,20,35,0.4)] border border-[var(--border-color)] flex items-center justify-between">
+        <div className="glass-panel p-4 flex items-center justify-between">
           <div>
             <span className="text-[10px] uppercase font-bold text-[var(--text-muted)] tracking-wider block">Total Index</span>
             <span className="text-xl font-extrabold text-white mt-1 block">{memories.length}</span>
-            <span className="text-[9px] text-[var(--color-secondary)] font-medium mt-1 block">Webpages Cached</span>
+            <span className="text-[9px] text-[var(--text-secondary)] font-medium mt-1 block">Webpages Cached</span>
           </div>
-          <div className="w-10 h-10 rounded-lg bg-[rgba(6,182,212,0.08)] border border-[rgba(6,182,212,0.15)] flex-center text-[var(--color-secondary)]">
+          <div 
+            className="w-10 h-10 rounded-lg border flex-center text-white"
+            style={{ backgroundColor: 'rgba(255, 255, 255, 0.02)', borderColor: 'var(--border-color)' }}
+          >
             <Globe size={18} />
           </div>
         </div>
 
         {/* Learning Streak */}
-        <div className="glass-panel p-4 bg-[rgba(16,20,35,0.4)] border border-[var(--border-color)] flex items-center justify-between">
+        <div className="glass-panel p-4 flex items-center justify-between">
           <div>
             <span className="text-[10px] uppercase font-bold text-[var(--text-muted)] tracking-wider block">Recall Streak</span>
             <span className="text-xl font-extrabold text-[var(--color-warning)] mt-1 block">{streak} Days</span>
             <span className="text-[9px] text-[var(--text-muted)] font-medium mt-1 block">Daily reviews completed: {completedCount}</span>
           </div>
-          <div className="w-10 h-10 rounded-lg bg-[rgba(245,158,11,0.08)] border border-[rgba(245,158,11,0.15)] flex-center text-[var(--color-warning)]">
+          <div 
+            className="w-10 h-10 rounded-lg border flex-center text-[var(--color-warning)]"
+            style={{ backgroundColor: 'rgba(255, 255, 255, 0.02)', borderColor: 'var(--border-color)' }}
+          >
             <Flame size={18} className="fill-[var(--color-warning)]" />
           </div>
         </div>
 
         {/* Due Cards */}
-        <div className="glass-panel p-4 bg-[rgba(16,20,35,0.4)] border border-[var(--border-color)] flex items-center justify-between">
+        <div className="glass-panel p-4 flex items-center justify-between">
           <div>
             <span className="text-[10px] uppercase font-bold text-[var(--text-muted)] tracking-wider block">Due Today</span>
             <span className="text-xl font-extrabold text-white mt-1 block">{dueCount} Cards</span>
             <span className="text-[9px] text-[var(--color-danger)] font-medium mt-1 block">Awaiting review</span>
           </div>
-          <div className="w-10 h-10 rounded-lg bg-[rgba(244,63,94,0.08)] border border-[rgba(244,63,94,0.15)] flex-center text-[var(--color-danger)]">
+          <div 
+            className="w-10 h-10 rounded-lg border flex-center text-white"
+            style={{ backgroundColor: 'rgba(255, 255, 255, 0.02)', borderColor: 'var(--border-color)' }}
+          >
             <Calendar size={18} />
           </div>
         </div>
 
         {/* Retrieval Accuracy */}
-        <div className="glass-panel p-4 bg-[rgba(16,20,35,0.4)] border border-[var(--border-color)] flex items-center justify-between">
+        <div className="glass-panel p-4 flex items-center justify-between">
           <div>
             <span className="text-[10px] uppercase font-bold text-[var(--text-muted)] tracking-wider block">Retention Score</span>
             <span className="text-xl font-extrabold text-[var(--color-success)] mt-1 block">92.4%</span>
             <span className="text-[9px] text-[var(--text-muted)] font-medium mt-1 block">SuperMemo accuracy</span>
           </div>
-          <div className="w-10 h-10 rounded-lg bg-[rgba(16,185,129,0.08)] border border-[rgba(16,185,129,0.15)] flex-center text-[var(--color-success)]">
+          <div 
+            className="w-10 h-10 rounded-lg border flex-center text-white"
+            style={{ backgroundColor: 'rgba(255, 255, 255, 0.02)', borderColor: 'var(--border-color)' }}
+          >
             <Award size={18} />
           </div>
         </div>
@@ -142,14 +154,14 @@ export const StatsPanel: React.FC<StatsPanelProps> = ({
       <div className="grid grid-cols-2 gap-6">
         
         {/* Left Side: Workspace Management */}
-        <div className="glass-panel p-5 bg-[rgba(16,20,35,0.45)] flex flex-col gap-4">
+        <div className="glass-panel p-5 flex flex-col gap-4">
           <div className="flex items-center justify-between border-b border-[var(--border-color)] pb-3">
             <h3 className="text-sm font-bold text-white flex items-center gap-1.5">
-              <Users size={16} className="text-[var(--color-primary)]" />
+              <Users size={16} className="text-white" />
               Collaborative Workspaces (P2)
             </h3>
             <span className="text-[9px] font-bold px-2 py-0.5 rounded bg-[rgba(255,255,255,0.03)] border border-[var(--border-color)] text-[var(--text-secondary)]">
-              Workspace Role: <strong className="text-[var(--color-secondary)] uppercase">{activeWorkspace.role}</strong>
+              Workspace Role: <strong className="text-white uppercase">{activeWorkspace.role}</strong>
             </span>
           </div>
 
@@ -159,10 +171,11 @@ export const StatsPanel: React.FC<StatsPanelProps> = ({
             <select
               value={currentWorkspace}
               onChange={e => setCurrentWorkspace(e.target.value)}
-              className="w-full text-xs bg-[rgba(255,255,255,0.02)] border-[var(--border-color)] py-2 px-3 focus:border-[var(--color-primary)]"
+              className="w-full text-xs bg-[rgba(255,255,255,0.02)] border-[var(--border-color)] py-2 px-3 focus:border-white"
+              style={{ color: 'var(--text-primary)' }}
             >
               {workspaces.map(w => (
-                <option key={w.id} value={w.name}>
+                <option key={w.id} value={w.name} style={{ backgroundColor: 'var(--bg-panel-solid)', color: '#ffffff' }}>
                   {w.name} ({w.role})
                 </option>
               ))}
@@ -179,7 +192,7 @@ export const StatsPanel: React.FC<StatsPanelProps> = ({
                   placeholder="name@team.com"
                   value={inviteEmail}
                   onChange={e => setInviteEmail(e.target.value)}
-                  className="flex-1 text-xs py-2 px-3"
+                  className="flex-1 text-xs py-2 px-3 focus:border-white"
                   required
                 />
                 <button type="submit" className="btn btn-primary text-xs py-2 px-3 flex items-center gap-1">
@@ -189,14 +202,14 @@ export const StatsPanel: React.FC<StatsPanelProps> = ({
               </div>
               
               {showInviteFeedback && (
-                <div className="flex items-center gap-1.5 text-[10px] text-[var(--color-success)] font-medium mt-1 animate-fade-in">
+                <div className="flex items-center gap-1.5 text-[10px] text-white font-medium mt-1 animate-fade-in">
                   <CheckCircle size={12} />
                   <span>Invitation sent successfully! Pending workspace sync.</span>
                 </div>
               )}
             </form>
           ) : (
-            <div className="p-3 bg-[rgba(244,63,94,0.03)] border border-[rgba(244,63,94,0.1)] rounded-lg text-[10px] text-[var(--color-danger)] font-medium">
+            <div className="p-3 bg-[rgba(255,255,255,0.01)] border border-[var(--border-color)] rounded-lg text-[10px] text-[var(--color-danger)] font-medium">
               You are a <strong>Viewer</strong> in this workspace. Editing and invitations are restricted to Owner and Editors.
             </div>
           )}
@@ -210,7 +223,7 @@ export const StatsPanel: React.FC<StatsPanelProps> = ({
                 placeholder="Workspace name (e.g. Technical Writing)"
                 value={newWorkspaceName}
                 onChange={e => setNewWorkspaceName(e.target.value)}
-                className="flex-1 text-xs py-2 px-3"
+                className="flex-1 text-xs py-2 px-3 focus:border-white"
                 required
               />
               <button type="submit" className="btn btn-secondary text-xs py-2 px-3 flex items-center gap-1">
@@ -237,10 +250,10 @@ export const StatsPanel: React.FC<StatsPanelProps> = ({
         </div>
 
         {/* Right Side: Activity Feed */}
-        <div className="glass-panel p-5 bg-[rgba(16,20,35,0.45)] flex flex-col gap-4">
+        <div className="glass-panel p-5 flex flex-col gap-4">
           <div className="flex items-center justify-between border-b border-[var(--border-color)] pb-3">
             <h3 className="text-sm font-bold text-white flex items-center gap-1.5">
-              <Activity size={16} className="text-[var(--color-secondary)]" />
+              <Activity size={16} className="text-[var(--text-secondary)]" />
               Workspace Activity Feed
             </h3>
             <span className="text-[9px] font-bold text-[var(--text-muted)] uppercase">Live Sync</span>
@@ -250,13 +263,10 @@ export const StatsPanel: React.FC<StatsPanelProps> = ({
             {teamActivities.map(act => (
               <div key={act.id} className="p-3 bg-[rgba(255,255,255,0.01)] border border-[var(--border-color)] rounded-lg flex items-start gap-2.5 hover:bg-[rgba(255,255,255,0.02)] transition-all">
                 {/* Action Icon representation */}
-                <div className={`w-6 h-6 rounded-full flex-center text-[10px] ${
-                  act.type === 'save' 
-                    ? 'bg-[rgba(6,182,212,0.08)] text-[var(--color-secondary)]' 
-                    : act.type === 'review'
-                      ? 'bg-[rgba(139,92,246,0.08)] text-[var(--color-primary)]'
-                      : 'bg-[rgba(16,185,129,0.08)] text-[var(--color-success)]'
-                }`}>
+                <div 
+                  className="w-6 h-6 rounded-full flex-center text-[10px] border"
+                  style={{ backgroundColor: 'rgba(255, 255, 255, 0.04)', borderColor: 'var(--border-color)' }}
+                >
                   {act.type === 'save' ? '🌐' : act.type === 'review' ? '🧠' : '👥'}
                 </div>
                 

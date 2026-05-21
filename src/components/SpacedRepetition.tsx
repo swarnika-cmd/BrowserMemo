@@ -48,12 +48,12 @@ export const SpacedRepetition: React.FC<SpacedRepetitionProps> = ({
   };
 
   return (
-    <div className="flex-1 flex flex-col items-center justify-center p-6 bg-[#030406] h-full overflow-y-auto">
+    <div className="flex-1 flex flex-col items-center justify-center p-6 bg-zinc-950 h-full overflow-y-auto">
       
       {/* Top Banner Stats */}
-      <div className="w-full max-w-lg mb-8 flex items-center justify-between glass-panel p-4 shadow-lg bg-[rgba(13,16,27,0.4)]">
+      <div className="w-full max-w-lg mb-8 flex items-center justify-between glass-panel p-4 shadow-lg">
         <div className="flex items-center gap-2">
-          <BookOpen className="text-[var(--color-primary)]" size={18} />
+          <BookOpen className="text-white" size={18} />
           <div>
             <h4 className="text-xs font-bold uppercase tracking-wider text-[var(--text-muted)]">Active Session</h4>
             <p className="text-sm font-semibold text-[var(--text-primary)]">
@@ -70,7 +70,10 @@ export const SpacedRepetition: React.FC<SpacedRepetitionProps> = ({
           </div>
 
           {/* Streak Counter */}
-          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[rgba(245,158,11,0.08)] border border-[rgba(245,158,11,0.2)]">
+          <div 
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border"
+            style={{ borderColor: 'var(--border-color)', backgroundColor: 'rgba(255, 255, 255, 0.02)' }}
+          >
             <Flame className="text-[var(--color-warning)] fill-[var(--color-warning)]" size={16} />
             <div>
               <span className="text-[9px] uppercase font-bold text-[var(--color-warning)] block leading-none">Streak</span>
@@ -85,11 +88,14 @@ export const SpacedRepetition: React.FC<SpacedRepetitionProps> = ({
         <div className={`w-full max-w-lg relative flex flex-col gap-6 transition-all duration-300 ${animClass}`} style={{ minHeight: '380px' }}>
           
           {/* Flashcard Frame */}
-          <div className={`glass-panel p-6 shadow-xl border-l-4 transition-all duration-500 bg-[rgba(16,20,35,0.7)] flex flex-col justify-between ${
-            reveal 
-              ? 'border-l-[var(--color-primary)]' 
-              : 'border-l-[var(--color-secondary)]'
-          }`} style={{ minHeight: '300px' }}>
+          <div 
+            className={`glass-panel p-6 shadow-xl border-l-4 transition-all duration-500 flex flex-col justify-between ${
+              reveal 
+                ? 'border-l-white' 
+                : 'border-l-[var(--text-muted)]'
+            }`} 
+            style={{ minHeight: '300px' }}
+          >
             
             <div>
               {/* Card Meta Header */}
@@ -131,12 +137,12 @@ export const SpacedRepetition: React.FC<SpacedRepetitionProps> = ({
                     <span className="text-[9px] font-bold uppercase text-[var(--text-muted)] tracking-wider">Key Entities Detected:</span>
                     <div className="flex flex-wrap gap-1.5">
                       {currentCard.entities.topics.map(topic => (
-                        <span key={topic} className="px-1.5 py-0.2 rounded bg-[var(--color-primary-glow)] text-[var(--color-primary)] text-[9px] font-medium border border-[rgba(139,92,246,0.15)]">
+                        <span key={topic} className="px-1.5 py-0.5 rounded text-white text-[9px] font-medium border" style={{ backgroundColor: 'rgba(255, 255, 255, 0.04)', borderColor: 'var(--border-color)' }}>
                           {topic}
                         </span>
                       ))}
                       {currentCard.entities.people.map(person => (
-                        <span key={person} className="px-1.5 py-0.2 rounded bg-[rgba(6,182,212,0.1)] text-[var(--color-secondary)] text-[9px] font-medium border border-[rgba(6,182,212,0.15)]">
+                        <span key={person} className="px-1.5 py-0.5 rounded text-[var(--text-secondary)] text-[9px] font-medium border" style={{ backgroundColor: 'rgba(255, 255, 255, 0.02)', borderColor: 'var(--border-color)' }}>
                           {person}
                         </span>
                       ))}
@@ -168,46 +174,49 @@ export const SpacedRepetition: React.FC<SpacedRepetitionProps> = ({
             <div className="grid grid-cols-4 gap-2.5 animate-fade-in">
               <button 
                 onClick={() => handleRate(1)}
-                className="btn py-3 px-1 border border-[rgba(244,63,94,0.3)] bg-[rgba(244,63,94,0.08)] hover:bg-[rgba(244,63,94,0.2)] text-[var(--color-danger)] font-bold text-xs rounded-lg flex flex-col gap-1 items-center"
+                className="btn py-3 px-1 border text-white font-bold text-xs rounded-lg flex flex-col gap-1 items-center bg-[rgba(255,255,255,0.02)] border-[var(--border-color)] hover:bg-white hover:text-black hover:border-white transition-all w-full"
               >
                 <span className="text-[14px]">😫</span>
                 <span>Forgot</span>
-                <span className="text-[9px] font-medium text-[rgba(244,63,94,0.6)]">Next: {getIntervalLabel(currentCard, 1)}</span>
+                <span className="text-[9px] font-medium opacity-65">Next: {getIntervalLabel(currentCard, 1)}</span>
               </button>
               
               <button 
                 onClick={() => handleRate(3)}
-                className="btn py-3 px-1 border border-[rgba(245,158,11,0.3)] bg-[rgba(245,158,11,0.08)] hover:bg-[rgba(245,158,11,0.2)] text-[var(--color-warning)] font-bold text-xs rounded-lg flex flex-col gap-1 items-center"
+                className="btn py-3 px-1 border text-white font-bold text-xs rounded-lg flex flex-col gap-1 items-center bg-[rgba(255,255,255,0.02)] border-[var(--border-color)] hover:bg-white hover:text-black hover:border-white transition-all w-full"
               >
                 <span className="text-[14px]">🤨</span>
                 <span>Hard</span>
-                <span className="text-[9px] font-medium text-[rgba(245,158,11,0.6)]">Next: {getIntervalLabel(currentCard, 3)}</span>
+                <span className="text-[9px] font-medium opacity-65">Next: {getIntervalLabel(currentCard, 3)}</span>
               </button>
               
               <button 
                 onClick={() => handleRate(4)}
-                className="btn py-3 px-1 border border-[rgba(59,130,246,0.3)] bg-[rgba(59,130,246,0.08)] hover:bg-[rgba(59,130,246,0.2)] text-blue-400 font-bold text-xs rounded-lg flex flex-col gap-1 items-center"
+                className="btn py-3 px-1 border text-white font-bold text-xs rounded-lg flex flex-col gap-1 items-center bg-[rgba(255,255,255,0.02)] border-[var(--border-color)] hover:bg-white hover:text-black hover:border-white transition-all w-full"
               >
                 <span className="text-[14px]">🙂</span>
                 <span>Good</span>
-                <span className="text-[9px] font-medium text-[rgba(59,130,246,0.6)]">Next: {getIntervalLabel(currentCard, 4)}</span>
+                <span className="text-[9px] font-medium opacity-65">Next: {getIntervalLabel(currentCard, 4)}</span>
               </button>
               
               <button 
                 onClick={() => handleRate(5)}
-                className="btn py-3 px-1 border border-[rgba(16,185,129,0.3)] bg-[rgba(16,185,129,0.08)] hover:bg-[rgba(16,185,129,0.2)] text-[var(--color-success)] font-bold text-xs rounded-lg flex flex-col gap-1 items-center"
+                className="btn py-3 px-1 border text-white font-bold text-xs rounded-lg flex flex-col gap-1 items-center bg-[rgba(255,255,255,0.02)] border-[var(--border-color)] hover:bg-white hover:text-black hover:border-white transition-all w-full"
               >
                 <span className="text-[14px]">😎</span>
                 <span>Easy</span>
-                <span className="text-[9px] font-medium text-[rgba(16,185,129,0.6)]">Next: {getIntervalLabel(currentCard, 5)}</span>
+                <span className="text-[9px] font-medium opacity-65">Next: {getIntervalLabel(currentCard, 5)}</span>
               </button>
             </div>
           )}
         </div>
       ) : (
         /* Empty / Completed Panel */
-        <div className="w-full max-w-lg glass-panel p-8 text-center flex flex-col items-center justify-center gap-5 shadow-2xl bg-[rgba(13,16,27,0.7)] border-t-2 border-t-[var(--color-success)] animate-fade-in" style={{ minHeight: '380px' }}>
-          <div className="w-16 h-16 rounded-full bg-[var(--color-success-bg)] border border-[rgba(16,185,129,0.2)] flex-center text-[var(--color-success)]">
+        <div 
+          className="w-full max-w-lg glass-panel p-8 text-center flex flex-col items-center justify-center gap-5 shadow-2xl animate-fade-in" 
+          style={{ minHeight: '380px', borderTop: '2px solid white' }}
+        >
+          <div className="w-16 h-16 rounded-full bg-[rgba(255,255,255,0.04)] border border-[rgba(255,255,255,0.1)] flex-center text-white">
             <CheckCircle size={32} />
           </div>
 
@@ -219,7 +228,7 @@ export const SpacedRepetition: React.FC<SpacedRepetitionProps> = ({
           </div>
 
           <div className="flex items-center gap-1.5 text-xs text-[var(--text-muted)] italic font-medium px-4 py-2 border border-dashed border-[var(--border-color)] rounded-lg bg-[rgba(255,255,255,0.01)] max-w-sm">
-            <Sparkles size={14} className="text-[var(--color-warning)] flex-shrink-0" />
+            <Sparkles size={14} className="text-[var(--text-secondary)] flex-shrink-0" />
             <span>"Memory is the mother of all wisdom." — Aeschylus</span>
           </div>
 
@@ -234,7 +243,7 @@ export const SpacedRepetition: React.FC<SpacedRepetitionProps> = ({
             </div>
             <div className="p-3 bg-[rgba(255,255,255,0.02)] border border-[var(--border-color)] rounded-lg text-center">
               <span className="text-[10px] uppercase font-bold text-[var(--text-muted)] block">Retention Rate</span>
-              <span className="text-base font-extrabold text-[var(--color-secondary)] flex-center gap-1.5 mt-1">
+              <span className="text-base font-extrabold text-white flex-center gap-1.5 mt-1">
                 <Award size={16} />
                 92%
               </span>

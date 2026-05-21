@@ -46,8 +46,20 @@ function App() {
 
   // Load state from LocalStorage on mount
   useEffect(() => {
+    const getAndMigrate = (newKey: string, oldKey: string): string | null => {
+      const newVal = localStorage.getItem(newKey);
+      if (newVal) return newVal;
+      const oldVal = localStorage.getItem(oldKey);
+      if (oldVal) {
+        localStorage.setItem(newKey, oldVal);
+        localStorage.removeItem(oldKey);
+        return oldVal;
+      }
+      return null;
+    };
+
     // 1. Memories loading
-    const cachedMemories = localStorage.getItem('orma_memories');
+    const cachedMemories = getAndMigrate('surata_memories', 'orma_memories');
     if (cachedMemories) {
       try {
         setMemories(JSON.parse(cachedMemories));
@@ -57,23 +69,23 @@ function App() {
     } else {
       // Seed default memories on first run
       setMemories(initialMemories);
-      localStorage.setItem('orma_memories', JSON.stringify(initialMemories));
+      localStorage.setItem('surata_memories', JSON.stringify(initialMemories));
     }
 
     // 2. Streak loading
-    const cachedStreak = localStorage.getItem('orma_streak');
+    const cachedStreak = getAndMigrate('surata_streak', 'orma_streak');
     if (cachedStreak) setStreak(parseInt(cachedStreak));
 
     // 3. Completed counts loading
-    const cachedCompleted = localStorage.getItem('orma_completed_count');
+    const cachedCompleted = getAndMigrate('surata_completed_count', 'orma_completed_count');
     if (cachedCompleted) setCompletedCount(parseInt(cachedCompleted));
 
     // 4. Last review date loading
-    const cachedDate = localStorage.getItem('orma_last_review_date');
+    const cachedDate = getAndMigrate('surata_last_review_date', 'orma_last_review_date');
     if (cachedDate) setLastReviewDate(cachedDate);
 
     // 5. Workspaces loading
-    const cachedWorkspaces = localStorage.getItem('orma_workspaces');
+    const cachedWorkspaces = getAndMigrate('surata_workspaces', 'orma_workspaces');
     if (cachedWorkspaces) {
       try {
         setWorkspaces(JSON.parse(cachedWorkspaces));
@@ -81,14 +93,14 @@ function App() {
         setWorkspaces(DEFAULT_WORKSPACES);
       }
     }
-    const cachedCurrentWorkspace = localStorage.getItem('orma_current_workspace');
+    const cachedCurrentWorkspace = getAndMigrate('surata_current_workspace', 'orma_current_workspace');
     if (cachedCurrentWorkspace) setCurrentWorkspace(cachedCurrentWorkspace);
   }, []);
 
   // Save memories to LocalStorage on updates
   const saveMemories = (updatedList: Memory[]) => {
     setMemories(updatedList);
-    localStorage.setItem('orma_memories', JSON.stringify(updatedList));
+    localStorage.setItem('surata_memories', JSON.stringify(updatedList));
     
     // Simulate real-time sync trigger (WebSocket sync visual)
     setIsSyncing(true);
@@ -152,14 +164,14 @@ function App() {
       // Completed review first time today
       newStreak = streak + 1;
       setStreak(newStreak);
-      localStorage.setItem('orma_streak', newStreak.toString());
+      localStorage.setItem('surata_streak', newStreak.toString());
       
       setLastReviewDate(todayStr);
-      localStorage.setItem('orma_last_review_date', todayStr);
+      localStorage.setItem('surata_last_review_date', todayStr);
     }
 
     setCompletedCount(newCompleted);
-    localStorage.setItem('orma_completed_count', newCompleted.toString());
+    localStorage.setItem('surata_completed_count', newCompleted.toString());
   };
 
   // Add Collaborative Workspace
@@ -171,9 +183,9 @@ function App() {
     };
     const updated = [...workspaces, newWsp];
     setWorkspaces(updated);
-    localStorage.setItem('orma_workspaces', JSON.stringify(updated));
+    localStorage.setItem('surata_workspaces', JSON.stringify(updated));
     setCurrentWorkspace(name);
-    localStorage.setItem('orma_current_workspace', name);
+    localStorage.setItem('surata_current_workspace', name);
   };
 
   // Select memory by details click
@@ -211,7 +223,7 @@ function App() {
   });
 
   return (
-    <div className="flex h-screen w-screen overflow-hidden bg-[var(--bg-app)]">
+    <div className="flex h-screen w-screen overflow-hidden bg-zinc-950">
       
       {/* Sidebar - Captures, search and memory stream */}
       <Sidebar 
@@ -233,18 +245,30 @@ function App() {
       <div className="flex-1 flex flex-col overflow-hidden relative">
         
         {/* Navigation Header */}
-        <div className="h-14 border-b border-[var(--border-color)] bg-[rgba(13,16,27,0.45)] flex items-center justify-between px-6 flex-shrink-0 z-20 backdrop-filter backdrop-blur-md">
+        <div 
+          className="h-14 border-b flex items-center justify-between px-6 flex-shrink-0 z-20"
+          style={{ 
+            backgroundColor: 'var(--bg-panel)', 
+            backdropFilter: 'blur(20px)',
+            WebkitBackdropFilter: 'blur(20px)'
+          }}
+        >
           {/* Tab Selection */}
           <div className="flex items-center gap-1.5">
             <button
               onClick={() => setActiveTab('graph')}
               className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold tracking-tight border transition-all ${
                 activeTab === 'graph'
-                  ? 'bg-[var(--color-primary-glow)] border-[var(--color-primary)] text-white shadow-sm'
-                  : 'bg-transparent border-transparent text-[var(--text-secondary)] hover:text-white hover:bg-[rgba(255,255,255,0.02)]'
+                  ? 'text-white shadow-sm'
+                  : 'bg-transparent border-transparent hover:text-white'
               }`}
+              style={{
+                backgroundColor: activeTab === 'graph' ? 'var(--color-primary-glow)' : 'transparent',
+                borderColor: activeTab === 'graph' ? 'var(--color-primary)' : 'transparent',
+                color: activeTab === 'graph' ? '#ffffff' : 'var(--text-secondary)'
+              }}
             >
-              <Network size={14} className={activeTab === 'graph' ? 'text-[var(--color-primary)]' : ''} />
+              <Network size={14} className={activeTab === 'graph' ? 'text-white' : ''} />
               Knowledge Graph
             </button>
 
@@ -252,11 +276,16 @@ function App() {
               onClick={() => setActiveTab('chat')}
               className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold tracking-tight border transition-all ${
                 activeTab === 'chat'
-                  ? 'bg-[var(--color-primary-glow)] border-[var(--color-primary)] text-white shadow-sm'
-                  : 'bg-transparent border-transparent text-[var(--text-secondary)] hover:text-white hover:bg-[rgba(255,255,255,0.02)]'
+                  ? 'text-white shadow-sm'
+                  : 'bg-transparent border-transparent hover:text-white'
               }`}
+              style={{
+                backgroundColor: activeTab === 'chat' ? 'var(--color-primary-glow)' : 'transparent',
+                borderColor: activeTab === 'chat' ? 'var(--color-primary)' : 'transparent',
+                color: activeTab === 'chat' ? '#ffffff' : 'var(--text-secondary)'
+              }}
             >
-              <MessageSquare size={14} className={activeTab === 'chat' ? 'text-[var(--color-secondary)]' : ''} />
+              <MessageSquare size={14} />
               RAG Chat
             </button>
 
@@ -264,14 +293,22 @@ function App() {
               onClick={() => setActiveTab('review')}
               className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold tracking-tight border transition-all relative ${
                 activeTab === 'review'
-                  ? 'bg-[var(--color-primary-glow)] border-[var(--color-primary)] text-white shadow-sm'
-                  : 'bg-transparent border-transparent text-[var(--text-secondary)] hover:text-white hover:bg-[rgba(255,255,255,0.02)]'
+                  ? 'text-white shadow-sm'
+                  : 'bg-transparent border-transparent hover:text-white'
               }`}
+              style={{
+                backgroundColor: activeTab === 'review' ? 'var(--color-primary-glow)' : 'transparent',
+                borderColor: activeTab === 'review' ? 'var(--color-primary)' : 'transparent',
+                color: activeTab === 'review' ? '#ffffff' : 'var(--text-secondary)'
+              }}
             >
-              <Brain size={14} className={activeTab === 'review' ? 'text-[var(--color-accent)]' : ''} />
+              <Brain size={14} />
               Review Queue
               {dueMemories.length > 0 && (
-                <span className="absolute -top-1 -right-1 w-4 h-4 bg-[var(--color-danger)] text-white text-[9px] font-bold rounded-full flex-center animate-pulse">
+                <span 
+                  className="absolute -top-1 -right-1 w-4 h-4 text-white text-[9px] font-bold rounded-full flex-center animate-pulse"
+                  style={{ backgroundColor: 'var(--color-danger)' }}
+                >
                   {dueMemories.length}
                 </span>
               )}
@@ -281,11 +318,16 @@ function App() {
               onClick={() => setActiveTab('stats')}
               className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold tracking-tight border transition-all ${
                 activeTab === 'stats'
-                  ? 'bg-[var(--color-primary-glow)] border-[var(--color-primary)] text-white shadow-sm'
-                  : 'bg-transparent border-transparent text-[var(--text-secondary)] hover:text-white hover:bg-[rgba(255,255,255,0.02)]'
+                  ? 'text-white shadow-sm'
+                  : 'bg-transparent border-transparent hover:text-white'
               }`}
+              style={{
+                backgroundColor: activeTab === 'stats' ? 'var(--color-primary-glow)' : 'transparent',
+                borderColor: activeTab === 'stats' ? 'var(--color-primary)' : 'transparent',
+                color: activeTab === 'stats' ? '#ffffff' : 'var(--text-secondary)'
+              }}
             >
-              <LayoutDashboard size={14} className={activeTab === 'stats' ? 'text-[var(--color-success)]' : ''} />
+              <LayoutDashboard size={14} />
               Workspace Dashboard
             </button>
           </div>
@@ -293,8 +335,14 @@ function App() {
           {/* Quick Metrics */}
           <div className="flex items-center gap-4">
             {/* Active Workspace Label */}
-            <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[rgba(255,255,255,0.02)] border border-[var(--border-color)]">
-              <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-secondary)]"></span>
+            <div 
+              className="flex items-center gap-1.5 px-3 py-1 rounded-full border"
+              style={{ 
+                backgroundColor: 'rgba(255, 255, 255, 0.02)', 
+                borderColor: 'var(--border-color)' 
+              }}
+            >
+              <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: 'var(--color-secondary)' }}></span>
               <span className="text-[10px] text-[var(--text-secondary)] font-bold uppercase tracking-wide">
                 {currentWorkspace}
               </span>
@@ -302,7 +350,7 @@ function App() {
 
             {/* Streak Label */}
             <div className="flex items-center gap-1">
-              <Flame className="text-[var(--color-warning)] fill-[var(--color-warning)]" size={15} />
+              <Flame style={{ color: 'var(--color-warning)', fill: 'var(--color-warning)' }} size={15} />
               <span className="text-xs font-extrabold text-[var(--text-primary)]">{streak}d Streak</span>
             </div>
           </div>
@@ -343,7 +391,7 @@ function App() {
               currentWorkspace={currentWorkspace}
               setCurrentWorkspace={(wsp) => {
                 setCurrentWorkspace(wsp);
-                localStorage.setItem('orma_current_workspace', wsp);
+                localStorage.setItem('surata_current_workspace', wsp);
               }}
               workspaces={workspaces}
               onAddWorkspace={handleAddWorkspace}

@@ -24,7 +24,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
     {
       id: 'msg-welcome',
       sender: 'bot',
-      text: 'Hello! I am ORMA, your Intelligent Second Brain. I have semantic access to everything you have captured online. \n\nAsk me anything about your saved memories, or select one of the suggestion chips below to start!',
+      text: 'Hello! I am Surata AI, your Intelligent Second Brain. I have semantic access to everything you have captured online. \n\nAsk me anything about your saved memories, or select one of the suggestion chips below to start!',
       timestamp: new Date().toISOString()
     }
   ]);
@@ -116,7 +116,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
           <button
             key={index}
             onClick={() => onSelectMemoryById(memId)}
-            className="inline-flex items-center justify-center px-1.5 py-0.5 mx-0.5 rounded bg-[rgba(139,92,246,0.15)] border border-[rgba(139,92,246,0.3)] hover:bg-[var(--color-primary)] hover:text-white text-[var(--color-primary)] text-[10px] font-bold transition-all cursor-pointer align-baseline select-none"
+            className="inline-flex items-center justify-center px-1.5 py-0.5 mx-0.5 rounded bg-[rgba(255,255,255,0.06)] border border-[var(--border-color)] hover:bg-white hover:text-black text-white text-[10px] font-bold transition-all cursor-pointer align-baseline select-none"
             title="Click to view memory detail"
           >
             {num}
@@ -128,16 +128,19 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
   };
 
   return (
-    <div className="flex-1 flex flex-col h-full bg-[#030406]">
+    <div className="flex-1 flex flex-col h-full bg-zinc-950">
       
       {/* Console Header */}
-      <div className="px-6 py-4 border-b border-[var(--border-color)] flex items-center justify-between bg-[rgba(10,12,22,0.4)]">
+      <div 
+        className="px-6 py-4 border-b flex items-center justify-between"
+        style={{ backgroundColor: 'rgba(24, 24, 27, 0.4)' }}
+      >
         <div className="flex items-center gap-2">
-          <Terminal size={16} className="text-[var(--color-primary)]" />
+          <Terminal size={16} className="text-white" />
           <h3 className="text-sm font-semibold tracking-tight text-[var(--text-primary)]">RAG Chat Terminal</h3>
         </div>
         <div className="flex items-center gap-1.5 text-[10px] text-[var(--text-muted)] font-medium">
-          <Sparkles size={12} className="text-[var(--color-secondary)]" />
+          <Sparkles size={12} className="text-[var(--text-secondary)]" />
           <span>Active Context: {memories.length} Memories</span>
         </div>
       </div>
@@ -155,16 +158,19 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
             >
               {/* Sender Tag */}
               <span className="text-[9px] font-bold text-[var(--text-muted)] uppercase tracking-wider mb-1 px-1">
-                {isBot ? 'Orma AI' : 'User'}
+                {isBot ? 'Surata AI' : 'User'}
               </span>
 
               {/* Message Bubble */}
               <div 
                 className={`p-3.5 rounded-2xl text-xs leading-relaxed border transition-all ${
                   isBot 
-                    ? 'bg-[rgba(16,20,35,0.75)] border-[var(--border-color)] text-[var(--text-secondary)] rounded-tl-none' 
-                    : 'bg-[var(--color-primary)] border-transparent text-white rounded-tr-none shadow-md'
+                    ? 'border-[var(--border-color)] text-[var(--text-secondary)] rounded-tl-none' 
+                    : 'bg-white border-transparent text-black rounded-tr-none shadow-md'
                 }`}
+                style={{
+                  backgroundColor: isBot ? 'rgba(24, 24, 27, 0.65)' : '#ffffff'
+                }}
               >
                 {renderMessageText(msg.text)}
               </div>
@@ -178,7 +184,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
                       onClick={() => onSelectMemoryById(cit.id)}
                       className="flex items-center gap-1 px-2 py-0.5 rounded bg-[rgba(255,255,255,0.02)] border border-[var(--border-color)] hover:border-[rgba(255,255,255,0.15)] text-[9px] text-[var(--text-muted)] hover:text-[var(--text-secondary)] transition-all font-medium"
                     >
-                      <span className="w-1 h-1 rounded-full bg-[var(--color-primary)]"></span>
+                      <span className="w-1 h-1 rounded-full bg-white"></span>
                       [{idx + 1}] {cit.title.slice(0, 20)}...
                     </button>
                   ))}
@@ -190,12 +196,12 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
         {isGenerating && (
           <div className="self-start flex flex-col max-w-[80%] items-start">
             <span className="text-[9px] font-bold text-[var(--text-muted)] uppercase tracking-wider mb-1 px-1">
-              Orma AI
+              Surata AI
             </span>
-            <div className="p-3 bg-[rgba(16,20,35,0.4)] border border-[var(--border-color)] text-[var(--text-muted)] rounded-2xl rounded-tl-none flex items-center gap-1.5 py-2.5 px-4">
-              <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-primary)] animate-bounce" style={{ animationDelay: '0ms' }}></span>
-              <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-primary)] animate-bounce" style={{ animationDelay: '150ms' }}></span>
-              <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-primary)] animate-bounce" style={{ animationDelay: '300ms' }}></span>
+            <div className="p-3 border border-[var(--border-color)] text-[var(--text-muted)] rounded-2xl rounded-tl-none flex items-center gap-1.5 py-2.5 px-4" style={{ backgroundColor: 'rgba(24, 24, 27, 0.4)' }}>
+              <span className="w-1.5 h-1.5 rounded-full bg-white animate-bounce" style={{ animationDelay: '0ms' }}></span>
+              <span className="w-1.5 h-1.5 rounded-full bg-white animate-bounce" style={{ animationDelay: '150ms' }}></span>
+              <span className="w-1.5 h-1.5 rounded-full bg-white animate-bounce" style={{ animationDelay: '300ms' }}></span>
             </div>
           </div>
         )}
@@ -219,7 +225,13 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
       )}
 
       {/* Input Panel */}
-      <div className="p-6 border-t border-[var(--border-color)] bg-[rgba(10,12,22,0.4)] flex gap-2">
+      <div 
+        className="p-6 border-t flex gap-2"
+        style={{ 
+          backgroundColor: 'rgba(24, 24, 27, 0.4)',
+          borderColor: 'var(--border-color)'
+        }}
+      >
         <textarea
           placeholder="Ask a question about your knowledge graph (e.g. 'What is the SM-2 algorithm?')"
           value={inputValue}
@@ -227,7 +239,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
           onKeyDown={handleKeyPress}
           disabled={isGenerating}
           rows={1}
-          className="flex-1 resize-none py-3 px-4 text-xs bg-[rgba(255,255,255,0.01)] border-[var(--border-color)] focus:bg-[rgba(255,255,255,0.03)] focus:border-[var(--color-primary)] min-h-[42px] max-h-[120px]"
+          className="flex-1 resize-none py-3 px-4 text-xs bg-[rgba(255,255,255,0.01)] border-[var(--border-color)] focus:bg-[rgba(255,255,255,0.03)] focus:border-white min-h-[42px] max-h-[120px]"
         />
         <button
           onClick={() => handleSend(inputValue)}

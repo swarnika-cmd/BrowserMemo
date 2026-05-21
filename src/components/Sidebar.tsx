@@ -185,13 +185,16 @@ export const Sidebar: React.FC<SidebarProps> = ({
       
       {/* Top Banner: Sync & App Info */}
       <div className="p-4 border-b border-[var(--border-color)] flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-[var(--color-primary)] flex-center text-white font-extrabold text-sm tracking-tighter">
-            OR
+        <div className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-md bg-white flex-center text-black font-extrabold text-sm tracking-tighter" style={{ fontFamily: 'var(--font-heading)' }}>
+            S
           </div>
           <div>
-            <h1 className="text-lg font-bold tracking-tight text-[var(--text-primary)]" style={{ margin: 0 }}>ORMA</h1>
-            <p className="text-xs text-[var(--text-muted)] font-medium">Your Intelligent Memory</p>
+            <div className="flex items-baseline gap-1.5">
+              <h1 className="text-lg font-bold tracking-tight text-white" style={{ fontFamily: 'var(--font-heading)', margin: 0 }}>Surata</h1>
+              <span className="text-sm font-medium text-[var(--text-secondary)]" style={{ fontFamily: 'var(--font-hindi)' }}>सुरता</span>
+            </div>
+            <p className="text-[10px] text-[var(--text-muted)] font-semibold uppercase tracking-wider">Your Second Brain</p>
           </div>
         </div>
         
@@ -199,7 +202,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[rgba(255,255,255,0.03)] border border-[var(--border-color)]">
           {isSyncing ? (
             <>
-              <CloudLightning size={12} className="text-[var(--color-secondary)] animate-pulse" />
+              <CloudLightning size={12} className="text-[var(--text-secondary)] animate-pulse" />
               <span className="text-[10px] text-[var(--text-secondary)] font-semibold">Syncing</span>
             </>
           ) : (
@@ -310,7 +313,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     onClick={() => toggleTag(tag)}
                     className={`flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium transition-all ${
                       isActive 
-                        ? 'bg-[var(--color-primary)] text-white border border-[var(--color-primary)]' 
+                        ? 'bg-white text-black border border-white' 
                         : 'bg-[rgba(255,255,255,0.03)] text-[var(--text-secondary)] border border-[var(--border-color)] hover:border-[rgba(255,255,255,0.15)]'
                     }`}
                   >
@@ -351,9 +354,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 onClick={() => onSelectMemory(memory)}
                 className={`glass-card p-3 flex flex-col gap-2 relative group cursor-pointer border transition-all ${
                   isSelected 
-                    ? 'border-[var(--color-primary)] bg-[rgba(139,92,246,0.08)] shadow-[var(--shadow-glow)]' 
-                    : 'border-[var(--border-color)] hover:border-[rgba(255,255,255,0.15)]'
+                    ? 'border-white' 
+                    : 'border-[var(--border-color)]'
                 }`}
+                style={isSelected ? { backgroundColor: 'rgba(255, 255, 255, 0.05)', boxShadow: 'var(--shadow-glow)' } : {}}
               >
                 {/* Header (Favicon + Domain + Date) */}
                 <div className="flex items-center justify-between">

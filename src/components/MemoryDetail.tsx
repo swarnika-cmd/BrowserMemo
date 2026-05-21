@@ -53,10 +53,10 @@ export const MemoryDetail: React.FC<MemoryDetailProps> = ({
   };
 
   return (
-    <div className="absolute top-0 right-0 h-full w-[420px] bg-[rgba(10,12,22,0.95)] border-l border-[var(--border-color)] shadow-2xl z-30 flex flex-col animate-slide-in-right backdrop-filter backdrop-blur-md">
+    <div className="absolute top-0 right-0 h-full w-[420px] bg-[rgba(24,24,27,0.95)] border-l border-[var(--border-color)] shadow-2xl z-30 flex flex-col animate-slide-in-right backdrop-filter backdrop-blur-md">
       
       {/* Header */}
-      <div className="p-4 border-b border-[var(--border-color)] flex items-center justify-between bg-[rgba(13,16,27,0.4)]">
+      <div className="p-4 border-b border-[var(--border-color)] flex items-center justify-between bg-[rgba(24,24,27,0.4)]">
         <div className="flex items-center gap-2">
           <img 
             src={`https://www.google.com/s2/favicons?domain=${domain}&sz=32`} 

@@ -61,13 +61,13 @@ export const KnowledgeGraph: React.FC<KnowledgeGraphProps> = ({
   const getTagColor = (tag: string): string => {
     const hash = tag.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
     const colors = [
-      '#8b5cf6', // Violet
-      '#06b6d4', // Cyan
-      '#10b981', // Emerald
-      '#f59e0b', // Amber
-      '#f43f5e', // Rose
-      '#3b82f6', // Blue
-      '#ec4899', // Pink
+      '#ffffff', // White
+      '#e4e4e7', // Zinc 200
+      '#a1a1aa', // Zinc 400
+      '#71717a', // Zinc 500
+      '#52525b', // Zinc 600
+      '#f4f4f5', // Zinc 100
+      '#d4d4d8', // Zinc 300
     ];
     return colors[hash % colors.length];
   };
@@ -199,7 +199,7 @@ export const KnowledgeGraph: React.FC<KnowledgeGraphProps> = ({
       .text(d => d.title.length > 25 ? d.title.slice(0, 22) + '...' : d.title)
       .attr('dy', 24)
       .attr('text-anchor', 'middle')
-      .attr('fill', '#94a3b8')
+      .attr('fill', '#a1a1aa')
       .attr('font-size', '10px')
       .attr('font-weight', '500')
       .style('pointer-events', 'none')
@@ -304,7 +304,7 @@ export const KnowledgeGraph: React.FC<KnowledgeGraphProps> = ({
       
       {/* Legend & Controls Header */}
       <div className="absolute top-4 left-4 z-10 flex flex-col gap-2 pointer-events-none">
-        <div className="glass-panel p-3 flex flex-col gap-2 pointer-events-auto shadow-lg bg-[rgba(10,12,22,0.85)]" style={{ minWidth: '150px' }}>
+        <div className="glass-panel p-3 flex flex-col gap-2 pointer-events-auto shadow-lg bg-[rgba(24,24,27,0.85)]" style={{ minWidth: '150px' }}>
           <h4 className="text-xs font-semibold text-[var(--text-primary)] border-b border-[var(--border-color)] pb-1 mb-1.5 flex items-center gap-1.5">
             <Info size={12} className="text-[var(--color-primary)]" />
             Topic Clusters
@@ -324,7 +324,7 @@ export const KnowledgeGraph: React.FC<KnowledgeGraphProps> = ({
       </div>
 
       {/* Floating Canvas Controls */}
-      <div className="absolute bottom-4 right-4 z-10 flex items-center gap-1.5 glass-panel p-1.5 pointer-events-auto bg-[rgba(10,12,22,0.85)] shadow-lg">
+      <div className="absolute bottom-4 right-4 z-10 flex items-center gap-1.5 glass-panel p-1.5 pointer-events-auto bg-[rgba(24,24,27,0.85)] shadow-lg">
         <button 
           onClick={() => handleZoom('in')}
           className="btn btn-ghost p-1.5 rounded hover:bg-[rgba(255,255,255,0.05)] text-[var(--text-secondary)] hover:text-white"
@@ -356,7 +356,7 @@ export const KnowledgeGraph: React.FC<KnowledgeGraphProps> = ({
       ) : (
         <svg 
           ref={svgRef} 
-          className="w-full h-full block bg-[#030406]"
+          className="w-full h-full block bg-[#09090b]"
           style={{ outline: 'none' }}
         />
       )}
