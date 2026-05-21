@@ -42,7 +42,7 @@ When you review a card, you rate it from 0 to 5. A rating of **3 or higher** (Fo
     answer: `Your saved article on **Building a Second Brain: The PARA Method** [1](mem-3) explains Tiago Forte's digital organization framework.
 
 PARA organizes information based on active utility rather than topic categories:
-1. **Projects**: Short-term tasks you are actively working on with a specific deadline (e.g., "Build Surata v0") [1](mem-3).
+1. **Projects**: Short-term tasks you are actively working on with a specific deadline (e.g., "Build Scribblit v0") [1](mem-3).
 2. **Areas**: Long-term ongoing responsibilities (e.g., "Health", "Finances", "Coding Skills").
 3. **Resources**: Topics of interest that might be useful later (e.g., "Deep Learning", "CSS Layouts") [1](mem-3).
 4. **Archives**: Completed items from the other folders saved for reference.

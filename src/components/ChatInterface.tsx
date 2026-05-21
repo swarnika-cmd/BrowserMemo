@@ -24,7 +24,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
     {
       id: 'msg-welcome',
       sender: 'bot',
-      text: 'Hello! I am Surata AI, your Intelligent Second Brain. I have semantic access to everything you have captured online. \n\nAsk me anything about your saved memories, or select one of the suggestion chips below to start!',
+      text: 'Hello! I am Scribblit AI, your Intelligent Second Brain. I have semantic access to everything you have captured online. \n\nAsk me anything about your saved memories, or select one of the suggestion chips below to start!',
       timestamp: new Date().toISOString()
     }
   ]);
@@ -158,7 +158,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
             >
               {/* Sender Tag */}
               <span className="text-[9px] font-bold text-[var(--text-muted)] uppercase tracking-wider mb-1 px-1">
-                {isBot ? 'Surata AI' : 'User'}
+                {isBot ? 'Scribblit AI' : 'User'}
               </span>
 
               {/* Message Bubble */}
@@ -196,7 +196,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
         {isGenerating && (
           <div className="self-start flex flex-col max-w-[80%] items-start">
             <span className="text-[9px] font-bold text-[var(--text-muted)] uppercase tracking-wider mb-1 px-1">
-              Surata AI
+              Scribblit AI
             </span>
             <div className="p-3 border border-[var(--border-color)] text-[var(--text-muted)] rounded-2xl rounded-tl-none flex items-center gap-1.5 py-2.5 px-4" style={{ backgroundColor: 'rgba(24, 24, 27, 0.4)' }}>
               <span className="w-1.5 h-1.5 rounded-full bg-white animate-bounce" style={{ animationDelay: '0ms' }}></span>

@@ -9,6 +9,7 @@ import { SpacedRepetition } from './components/SpacedRepetition';
 import { ChatInterface } from './components/ChatInterface';
 import { MemoryDetail } from './components/MemoryDetail';
 import { StatsPanel } from './components/StatsPanel';
+import { LandingPage } from './components/LandingPage';
 import { Network, MessageSquare, Brain, LayoutDashboard, Flame } from 'lucide-react';
 
 interface Workspace {
@@ -25,6 +26,11 @@ const DEFAULT_WORKSPACES: Workspace[] = [
 
 function App() {
   // 1. Core State
+  const [showDashboard, setShowDashboard] = useState(false);
+  const [theme, setTheme] = useState<'dark' | 'light'>(() => {
+    return (localStorage.getItem('scribblit_theme') as 'dark' | 'light') || 'dark';
+  });
+
   const [memories, setMemories] = useState<Memory[]>([]);
   const [selectedMemory, setSelectedMemory] = useState<Memory | null>(null);
   const [activeTab, setActiveTab] = useState<'graph' | 'chat' | 'review' | 'stats'>('graph');
@@ -43,6 +49,16 @@ function App() {
   // Workspaces state
   const [workspaces, setWorkspaces] = useState<Workspace[]>(DEFAULT_WORKSPACES);
   const [currentWorkspace, setCurrentWorkspace] = useState('Personal Brain');
+
+  // Sync theme with DOM class
+  useEffect(() => {
+    localStorage.setItem('scribblit_theme', theme);
+    if (theme === 'light') {
+      document.documentElement.classList.add('light');
+    } else {
+      document.documentElement.classList.remove('light');
+    }
+  }, [theme]);
 
   // Load state from LocalStorage on mount
   useEffect(() => {
@@ -133,6 +149,29 @@ function App() {
     setSelectedMemory(metaMemory);
   };
 
+  const handleSaveNoteAndLaunch = (title: string, content: string, tags: string[]) => {
+    handleAddMemory({
+      title,
+      content: `<p>${content}</p>`,
+      textContent: content,
+      tags,
+      url: '',
+      entities: {
+        topics: tags,
+        people: [],
+        organizations: [],
+        dates: [new Date().toLocaleDateString()]
+      },
+      sm2: {
+        interval: 1,
+        repetitions: 0,
+        easeFactor: 2.5,
+        nextReviewDate: new Date().toISOString()
+      }
+    });
+    setShowDashboard(true);
+  };
+
   const handleDeleteMemory = (id: string) => {
     const updated = memories.filter(m => m.id !== id);
     saveMemories(updated);
@@ -221,6 +260,17 @@ function App() {
   const dueMemories = workspaceMemories.filter(m => {
     return new Date(m.sm2.nextReviewDate) <= now;
   });
+
+  if (!showDashboard) {
+    return (
+      <LandingPage 
+        onLaunchApp={() => setShowDashboard(true)}
+        onSaveNoteAndLaunch={handleSaveNoteAndLaunch}
+        theme={theme}
+        setTheme={setTheme}
+      />
+    );
+  }
 
   return (
     <div className="flex h-screen w-screen overflow-hidden bg-zinc-950">
@@ -353,6 +403,18 @@ function App() {
               <Flame style={{ color: 'var(--color-warning)', fill: 'var(--color-warning)' }} size={15} />
               <span className="text-xs font-extrabold text-[var(--text-primary)]">{streak}d Streak</span>
             </div>
+
+            {/* Exit to Home */}
+            <button
+              onClick={() => setShowDashboard(false)}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-[10px] font-bold uppercase tracking-wide text-[var(--text-secondary)] hover:text-white transition-all cursor-pointer"
+              style={{
+                borderColor: 'var(--border-color)',
+                backgroundColor: 'rgba(255, 255, 255, 0.02)'
+              }}
+            >
+              Exit to Home
+            </button>
           </div>
         </div>
 
