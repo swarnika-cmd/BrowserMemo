@@ -4,6 +4,8 @@ import { encryptText } from './crypto';
 // Configure transformers for MV3 browser extension context
 env.allowLocalModels = false;
 env.useBrowserCache = true;
+env.backends.onnx.wasm.numThreads = 1;
+
 
 // 1. Sensitive Domain Blocklist (Hardcoded & Non-negotiable Privacy Guarantee)
 const SENSITIVE_DOMAINS = [
@@ -223,3 +225,13 @@ chrome.runtime.onStartup.addListener(() => {
 chrome.action.onClicked.addListener(() => {
   flushOfflineQueue();
 });
+
+// Active tab tracking to capture SPA navigation URL changes
+chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+  if (changeInfo.status === 'complete' && tab.url && tab.url.startsWith('http')) {
+    chrome.tabs.sendMessage(tabId, { type: 'TRIGGER_CAPTURE' }).catch(() => {
+      // Content script may not be loaded or active yet, which is safe to ignore
+    });
+  }
+});
+

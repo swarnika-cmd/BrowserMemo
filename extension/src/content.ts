@@ -37,6 +37,9 @@ function extractCleanText(): { title: string; url: string; textContent: string }
   return { title, url, textContent: cleanedText };
 }
 
+let retryCount = 0;
+const MAX_RETRIES = 3;
+
 function runCaptureFlow() {
   const capturedData = extractCleanText();
   // Don't capture empty pages or internal browser states
@@ -45,8 +48,23 @@ function runCaptureFlow() {
       type: 'PAGE_CAPTURED',
       payload: capturedData
     });
+    retryCount = 0; // reset retry counter on success
+  } else if (retryCount < MAX_RETRIES) {
+    retryCount++;
+    console.log(`[Smarana Capture] Scraped text too short (${capturedData.textContent.length} chars). Page might still be rendering. Retrying capture in 2s (Attempt ${retryCount}/${MAX_RETRIES})...`);
+    setTimeout(runCaptureFlow, 2000);
+  } else {
+    console.log(`[Smarana Capture] Abandoned capture after ${MAX_RETRIES} retries. Text content remained too short.`);
   }
 }
+
+// Listen for message triggers from background script (handles dynamic tab updates / SPAs)
+chrome.runtime.onMessage.addListener((message) => {
+  if (message.type === 'TRIGGER_CAPTURE') {
+    retryCount = 0; // Reset retries for new navigation triggers
+    runCaptureFlow();
+  }
+});
 
 // Ensure the page load is completely finished and execution happens during browser idle time
 if (typeof window !== 'undefined') {
@@ -56,3 +74,4 @@ if (typeof window !== 'undefined') {
     setTimeout(runCaptureFlow, 1000);
   }
 }
+
