@@ -1,0 +1,16 @@
+{
+  "name": "smarana-extension",
+  "version": "2.0.0",
+  "description": "Chrome Extension background script for local-first capture and encryption.",
+  "scripts": {
+    "build": "esbuild src/background.ts src/content.ts --bundle --outdir=dist --format=esm --target=chrome100",
+    "watch": "esbuild src/background.ts src/content.ts --bundle --outdir=dist --format=esm --target=chrome100 --watch"
+  },
+  "dependencies": {
+    "@xenova/transformers": "^2.17.2"
+  },
+  "devDependencies": {
+    "esbuild": "^0.20.1",
+    "typescript": "^5.3.3"
+  }
+}

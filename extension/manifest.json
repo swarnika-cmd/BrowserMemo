@@ -1,0 +1,31 @@
+{
+  "manifest_version": 3,
+  "name": "Smarana — Your Intelligent Second Brain",
+  "version": "2.0.0",
+  "description": "Privacy-first client-side encrypted second brain extension.",
+  "permissions": [
+    "tabs",
+    "storage",
+    "unlimitedStorage",
+    "scripting",
+    "history"
+  ],
+  "host_permissions": [
+    "http://*/*",
+    "https://*/*"
+  ],
+  "background": {
+    "service_worker": "dist/background.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["dist/content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_title": "Smarana (स्मरण)"
+  }
+}
