@@ -9,7 +9,7 @@ services:
       POSTGRES_USER: smarana_user
       POSTGRES_PASSWORD: smarana_secure_pass_2026
     ports:
-      - "5432:5432"
+      - "54321:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
