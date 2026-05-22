@@ -111,12 +111,22 @@ async function flushOfflineQueue() {
 }
 
 // Main capture worker
-async function handlePageCapture(payload: { title: string; url: string; textContent: string }) {
+async function handlePageCapture(
+  payload: { title: string; url: string; textContent: string },
+  tabId?: number
+) {
   const { title, url, textContent } = payload;
+
+  const sendStatus = (msg: string) => {
+    if (tabId) {
+      chrome.tabs.sendMessage(tabId, { type: 'CAPTURE_STATUS', message: msg }).catch(() => {});
+    }
+  };
 
   // 1. Enforce Non-negotiable Privacy Blocklist
   if (isSensitive(url)) {
     console.log(`[Smarana Background] Ignored sensitive/blocked URL: ${url}`);
+    sendStatus(`Ignored sensitive/blocked URL: ${url}`);
     return;
   }
 
@@ -125,6 +135,7 @@ async function handlePageCapture(payload: { title: string; url: string; textCont
   const lastCaptureTime = captureWindow.get(url);
   if (lastCaptureTime && (now - lastCaptureTime) < DEDUPLICATION_WINDOW_MS) {
     console.log(`[Smarana Background] Ignored duplicate URL visit within 30-min window: ${url}`);
+    sendStatus('Ignored duplicate URL visit within 30-min window.');
     return;
   }
   // Record capture timestamp
@@ -141,6 +152,7 @@ async function handlePageCapture(payload: { title: string; url: string; textCont
   const settings = await chrome.storage.local.get(['masterPassword', 'jwtToken', 'isPaused']);
   if (settings.isPaused) {
     console.log('[Smarana Background] Passive capture is currently paused.');
+    sendStatus('Passive capture is currently paused.');
     return;
   }
 
@@ -149,14 +161,18 @@ async function handlePageCapture(payload: { title: string; url: string; textCont
 
   if (!password) {
     console.warn('[Smarana Background] Master password not configured. Skipping server upload.');
+    sendStatus('Warning: Master password not configured. Skipping capture.');
     return;
   }
 
   try {
     console.log(`[Smarana Background] Capturing page: "${title}"`);
+    sendStatus(`Capturing page "${title}" - running local embedding model...`);
 
     // 3. Generate Local WASM Embeddings
     const embedding = await generateEmbedding(textContent);
+
+    sendStatus('Embedding generated. Encrypting data client-side...');
 
     // 4. Client-side AES-256 Encryption
     // Server only stores ciphertext. URLs, titles, and text are encrypted on-device.
@@ -175,6 +191,7 @@ async function handlePageCapture(payload: { title: string; url: string; textCont
 
     // 5. Send to FastAPI backend
     if (token) {
+      sendStatus('Data encrypted. Syncing with backend...');
       try {
         const response = await fetch('http://localhost:8000/api/memories', {
           method: 'POST',
@@ -189,8 +206,10 @@ async function handlePageCapture(payload: { title: string; url: string; textCont
           throw new Error(`Sync failed with status code ${response.status}`);
         }
         console.log('[Smarana Background] Successfully saved client-encrypted memory to cloud backend.');
+        sendStatus('Success! Saved client-encrypted memory to backend.');
       } catch (err) {
         console.warn('[Smarana Background] Network sync failed. Caching memory locally in queue.');
+        sendStatus('Network sync failed. Saved to local offline queue.');
         const data = await chrome.storage.local.get('offlineQueue');
         const queue = data.offlineQueue || [];
         queue.push(memoryPayload);
@@ -203,16 +222,18 @@ async function handlePageCapture(payload: { title: string; url: string; textCont
       queue.push(memoryPayload);
       await chrome.storage.local.set({ offlineQueue: queue });
       console.log('[Smarana Background] Saved captured memory to local queue (User not logged in).');
+      sendStatus('Saved to local offline queue (Not logged in).');
     }
-  } catch (error) {
+  } catch (error: any) {
     console.error('[Smarana Background] Capture process encountered an error:', error);
+    sendStatus(`Error during capture: ${error.message || error}`);
   }
 }
 
 // Listen to captured messages from injected content script
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === 'PAGE_CAPTURED') {
-    handlePageCapture(message.payload);
+    handlePageCapture(message.payload, sender.tab?.id);
   }
 });
 

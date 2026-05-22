@@ -63,6 +63,8 @@ chrome.runtime.onMessage.addListener((message) => {
   if (message.type === 'TRIGGER_CAPTURE') {
     retryCount = 0; // Reset retries for new navigation triggers
     runCaptureFlow();
+  } else if (message.type === 'CAPTURE_STATUS') {
+    console.log(`[Smarana Capture Status] ${message.message}`);
   }
 });
 
