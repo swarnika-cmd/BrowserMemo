@@ -4,7 +4,7 @@
 
 ---
 
-## 🚀 Key Architectural Features (Recruiter "Wow" Factors)
+## 🚀 Key Architectural Features 
 
 *   **🔒 Zero-Knowledge Cryptography**: Sensitive page content, titles, and URLs are encrypted on-device using standard **AES-256-GCM** keys derived via **PBKDF2** from your master passcode. The server only stores encrypted ciphertexts and can never read your notes.
 *   **🔍 Hybrid Search Engine (RRF)**: Fuses server-side semantic vector search (384-dimensional cosine similarity via `pgvector`) with local full-text search (TF-IDF tokens in browser `IndexedDB`) using **Reciprocal Rank Fusion (RRF)** to deliver unmatched retrieval accuracy.
