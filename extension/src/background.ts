@@ -1,5 +1,9 @@
 import { pipeline, env } from '@xenova/transformers';
 import { encryptText } from './crypto';
+import { saveLocalMemory } from './localDb';
+
+declare const process: { env: { API_URL: string } };
+const API_URL = typeof process !== 'undefined' && process.env?.API_URL ? process.env.API_URL : 'http://localhost:8000';
 
 // Configure transformers for MV3 browser extension context
 env.allowLocalModels = false;
@@ -88,7 +92,7 @@ async function flushOfflineQueue() {
 
   for (const item of queue) {
     try {
-      const response = await fetch('http://localhost:8000/api/memories', {
+      const response = await fetch(`${API_URL}/api/memories`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -189,11 +193,31 @@ async function handlePageCapture(
       embedding: embedding
     };
 
+    // Save decrypted copy to IndexedDB for local hybrid search
+    try {
+      await saveLocalMemory({
+        id: memoryId,
+        title: title,
+        url: url,
+        textContent: textContent,
+        createdAt: new Date().toISOString(),
+        sm2: {
+          interval: 1,
+          repetitions: 0,
+          easeFactor: 2.5,
+          nextReviewDate: new Date().toISOString()
+        }
+      });
+      console.log('[Smarana Background] Saved decrypted memory to local IndexedDB.');
+    } catch (dbErr) {
+      console.error('[Smarana Background] Failed to save to local IndexedDB:', dbErr);
+    }
+
     // 5. Send to FastAPI backend
     if (token) {
       sendStatus('Data encrypted. Syncing with backend...');
       try {
-        const response = await fetch('http://localhost:8000/api/memories', {
+        const response = await fetch(`${API_URL}/api/memories`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -234,6 +258,24 @@ async function handlePageCapture(
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === 'PAGE_CAPTURED') {
     handlePageCapture(message.payload, sender.tab?.id);
+  } else if (message.type === 'GENERATE_EMBEDDING') {
+    generateEmbedding(message.text)
+      .then(embedding => {
+        sendResponse({ success: true, embedding });
+      })
+      .catch(err => {
+        console.error('[Smarana Background] Failed to generate embedding message:', err);
+        sendResponse({ success: false, error: err.message || String(err) });
+      });
+    return true; // asynchronous response
+  } else if (message.type === 'FLUSH_OFFLINE_QUEUE') {
+    flushOfflineQueue()
+      .then(() => sendResponse({ success: true }))
+      .catch(err => {
+        console.error('[Smarana Background] Failed to flush offline queue:', err);
+        sendResponse({ success: false, error: err.message || String(err) });
+      });
+    return true;
   }
 });
 

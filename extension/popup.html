@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smarana — Your Second Brain</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #09090b;
+      --card-bg: #18181b;
+      --card-bg-hover: #202024;
+      --border: #27272a;
+      --border-focus: #3f3f46;
+      --text: #fafafa;
+      --text-muted: #a1a1aa;
+      --text-dark: #71717a;
+      --primary: #8b5cf6;
+      --primary-hover: #7c3aed;
+      --primary-gradient: linear-gradient(135deg, #a78bfa 0%, #8b5cf6 50%, #6d28d9 100%);
+      --accent: #d946ef;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --error: #ef4444;
+      --glow: rgba(139, 92, 246, 0.15);
+      --font-display: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-body: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      width: 400px;
+      height: 600px;
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 14px;
+      line-height: 1.5;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* Scrollbars */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--border-focus);
+    }
+
+    /* Utilities & Layouts */
+    .hidden {
+      display: none !important;
+    }
+
+    .flex-1 {
+      flex: 1;
+    }
+
+    /* Header styling */
+    header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(9, 9, 11, 0.8);
+      backdrop-filter: blur(12px);
+      z-index: 10;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: var(--primary-gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 12px var(--glow);
+    }
+
+    .logo-icon svg {
+      width: 16px;
+      height: 16px;
+      fill: #fff;
+    }
+
+    .logo-text {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 18px;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #ffffff 0%, #d4d4d8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .status-ring {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: var(--text-dark);
+      position: relative;
+    }
+
+    .status-ring.active {
+      background-color: var(--success);
+      box-shadow: 0 0 8px var(--success);
+    }
+
+    .status-ring.paused {
+      background-color: var(--warning);
+      box-shadow: 0 0 8px var(--warning);
+    }
+
+    /* Auth Screen styling */
+    #auth-screen {
+      padding: 30px 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      height: 100%;
+      overflow-y: auto;
+    }
+
+    .auth-title {
+      font-family: var(--font-display);
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      text-align: center;
+    }
+
+    .auth-subtitle {
+      color: var(--text-muted);
+      font-size: 13px;
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .tabs-auth {
+      display: flex;
+      border-radius: 8px;
+      background: #121214;
+      padding: 4px;
+      margin-bottom: 20px;
+      border: 1px solid var(--border);
+    }
+
+    .tab-auth-btn {
+      flex: 1;
+      padding: 8px;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .tab-auth-btn.active {
+      background: var(--card-bg);
+      color: var(--text);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .input-wrapper {
+      position: relative;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 10px 12px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 13px;
+      transition: all 0.2s ease;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px var(--glow);
+    }
+
+    .btn-primary {
+      width: 100%;
+      padding: 12px;
+      background: var(--primary-gradient);
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.25);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(139, 92, 246, 0.35);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+
+    .auth-error {
+      color: var(--error);
+      font-size: 12px;
+      margin-top: 8px;
+      text-align: center;
+      min-height: 18px;
+    }
+
+    /* Main Container (Post-Auth) */
+    #main-container {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    /* Content Panels */
+    .panel {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      padding: 16px 20px;
+    }
+
+    /* Nav Tabs Bar */
+    nav.tab-bar {
+      display: flex;
+      border-top: 1px solid var(--border);
+      background: #0d0d0f;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 12px;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s ease;
+    }
+
+    .tab-btn svg {
+      width: 18px;
+      height: 18px;
+      fill: currentColor;
+    }
+
+    .tab-btn:hover {
+      color: var(--text);
+    }
+
+    .tab-btn.active {
+      color: var(--primary);
+    }
+
+    /* Search Panel elements */
+    .search-box-wrapper {
+      position: relative;
+      margin-bottom: 16px;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 12px 16px 12px 40px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 14px;
+      transition: all 0.2s ease;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--glow);
+    }
+
+    .search-icon-svg {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 16px;
+      height: 16px;
+      fill: var(--text-muted);
+      pointer-events: none;
+    }
+
+    .results-count {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      font-weight: 500;
+    }
+
+    .memories-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding-bottom: 20px;
+    }
+
+    .memory-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      transition: all 0.2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .memory-card:hover {
+      border-color: var(--border-focus);
+      background: var(--card-bg-hover);
+      transform: translateY(-1px);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+
+    .card-title {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--text);
+      text-decoration: none;
+      line-height: 1.3;
+      word-break: break-word;
+      transition: color 0.2s ease;
+    }
+
+    .card-title:hover {
+      color: var(--primary);
+    }
+
+    .card-url {
+      font-size: 11px;
+      color: var(--text-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 250px;
+      margin-bottom: 8px;
+      display: block;
+      text-decoration: none;
+    }
+
+    .card-url:hover {
+      text-decoration: underline;
+    }
+
+    .card-snippet {
+      font-size: 12px;
+      color: var(--text-muted);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      margin-bottom: 10px;
+      line-height: 1.4;
+    }
+
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      border-top: 1px solid rgba(255,255,255,0.03);
+      padding-top: 8px;
+      color: var(--text-dark);
+    }
+
+    .score-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 600;
+      background: rgba(139, 92, 246, 0.1);
+      color: var(--primary);
+    }
+
+    /* Review Panel elements */
+    .review-deck-status {
+      text-align: center;
+      padding: 16px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: 20px;
+    }
+
+    .review-deck-count {
+      font-family: var(--font-display);
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .review-card-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .flashcard {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      min-height: 250px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    .flashcard-header {
+      font-size: 11px;
+      color: var(--primary);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+    }
+
+    .flashcard-title {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 12px;
+    }
+
+    .flashcard-url {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+      word-break: break-all;
+    }
+
+    .flashcard-body {
+      flex: 1;
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.5;
+      overflow-y: auto;
+      border-top: 1px solid var(--border);
+      padding-top: 16px;
+      margin-bottom: 16px;
+    }
+
+    .flashcard-prompt-reveal {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+      border: 2px dashed var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: all 0.2s ease;
+    }
+
+    .flashcard-prompt-reveal:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      background: rgba(139, 92, 246, 0.02);
+    }
+
+    .rating-container {
+      display: flex;
+      gap: 6px;
+      justify-content: space-between;
+      margin-top: 12px;
+    }
+
+    .rating-btn {
+      flex: 1;
+      padding: 8px 4px;
+      border: 1px solid var(--border);
+      background: #1c1c1f;
+      border-radius: 6px;
+      color: var(--text);
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+    }
+
+    .rating-btn span {
+      font-size: 14px;
+    }
+
+    .rating-btn:hover {
+      background: var(--border-focus);
+      border-color: var(--text-muted);
+    }
+
+    .rating-btn[data-val="0"]:hover { border-color: #ef4444; color: #ef4444; }
+    .rating-btn[data-val="1"]:hover { border-color: #f97316; color: #f97316; }
+    .rating-btn[data-val="2"]:hover { border-color: #f59e0b; color: #f59e0b; }
+    .rating-btn[data-val="3"]:hover { border-color: #eab308; color: #eab308; }
+    .rating-btn[data-val="4"]:hover { border-color: #84cc16; color: #84cc16; }
+    .rating-btn[data-val="5"]:hover { border-color: #22c55e; color: #22c55e; }
+
+    /* Settings Panel elements */
+    .settings-section {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+
+    .settings-section-title {
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .settings-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+    }
+
+    .settings-row:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .settings-label {
+      font-size: 13px;
+      color: var(--text);
+    }
+
+    .settings-desc {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    /* Toggle switch */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 44px;
+      height: 24px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: var(--border);
+      transition: .3s;
+      border-radius: 24px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: #fff;
+      transition: .3s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: var(--primary);
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(20px);
+    }
+
+    .btn-secondary {
+      padding: 6px 12px;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-secondary:hover {
+      background: var(--border);
+      border-color: var(--border-focus);
+    }
+
+    .btn-secondary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .btn-danger {
+      padding: 6px 12px;
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+      border-radius: 6px;
+      color: var(--error);
+      font-family: var(--font-body);
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-danger:hover {
+      background: rgba(239, 68, 68, 0.2);
+      border-color: rgba(239, 68, 68, 0.4);
+    }
+
+    .badge {
+      font-size: 11px;
+      padding: 2px 6px;
+      background: var(--border);
+      color: var(--text-muted);
+      border-radius: 10px;
+      font-weight: 600;
+    }
+
+    .user-profile-email {
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    /* Loading overlay */
+    #loading-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(9, 9, 11, 0.85);
+      backdrop-filter: blur(4px);
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      transition: all 0.3s ease;
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid rgba(139, 92, 246, 0.1);
+      border-radius: 50%;
+      border-top-color: var(--primary);
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .loading-text {
+      font-family: var(--font-display);
+      font-weight: 500;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Loading Overlay -->
+  <div id="loading-overlay" class="hidden">
+    <div class="spinner"></div>
+    <div id="loading-text" class="loading-text">Processing...</div>
+  </div>
+
+  <!-- Header -->
+  <header>
+    <div class="logo-container">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24">
+          <!-- Brain / Memory icon -->
+          <path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4.35 19.4c-.39.39-.39 1.02 0 1.41.39.39 1.02.39 1.41 0l1.9-1.9C9.13 19.64 10.5 20 12 20c4.97 0 9-4.03 9-9s-4.03-9-9-9zm0 15c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6zm-1-8h2v2h-2zm0 4h2v2h-2z"/>
+        </svg>
+      </div>
+      <div class="logo-text">Smarana</div>
+    </div>
+    <div id="capture-status-dot" class="status-ring" title="Passive capture status"></div>
+  </header>
+
+  <!-- Auth Screen -->
+  <div id="auth-screen">
+    <div class="auth-title">Welcome to Smarana</div>
+    <div class="auth-subtitle">Your private, encrypted local-first second brain</div>
+
+    <div class="tabs-auth">
+      <button id="auth-login-tab" class="tab-auth-btn active">Sign In</button>
+      <button id="auth-signup-tab" class="tab-auth-btn">Register</button>
+    </div>
+
+    <!-- Login/Register Form -->
+    <form id="auth-form" autocomplete="off">
+      <div class="form-group">
+        <label for="auth-email">Email Address</label>
+        <input type="email" id="auth-email" class="form-input" placeholder="you@example.com" required>
+      </div>
+
+      <div class="form-group">
+        <label for="auth-password">Account Password</label>
+        <input type="password" id="auth-password" class="form-input" placeholder="••••••••" required>
+      </div>
+
+      <div class="form-group">
+        <label for="auth-master-password">
+          Master Decryption Passcode
+          <span style="font-weight: normal; font-size: 11px; display: block; color: var(--warning); margin-top: 2px;">
+            ⚠️ Essential: Never sent to server. Derived local key encrypts your data.
+          </span>
+        </label>
+        <input type="password" id="auth-master-password" class="form-input" placeholder="Must be strong passcode" required>
+      </div>
+
+      <button type="submit" id="auth-submit-btn" class="btn-primary">Sign In</button>
+    </form>
+    <div id="auth-error-msg" class="auth-error"></div>
+  </div>
+
+  <!-- Main Container -->
+  <div id="main-container" class="hidden">
+    <!-- Search Panel -->
+    <div id="search-panel" class="panel">
+      <div class="search-box-wrapper">
+        <svg class="search-icon-svg" viewBox="0 0 24 24">
+          <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+        </svg>
+        <input type="text" id="search-query" class="search-input" placeholder="Search decrypted memories (hybrid rank)...">
+      </div>
+
+      <div id="search-status-bar" class="results-count">All Memories</div>
+
+      <div class="flex-1" style="overflow-y: auto;">
+        <div id="memories-container" class="memories-list">
+          <!-- Cards injected here -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Review Panel -->
+    <div id="review-panel" class="panel hidden">
+      <div class="review-deck-status">
+        <div class="review-deck-count" id="review-queue-count">0</div>
+        <div style="font-size: 12px; color: var(--text-muted); font-weight: 500; margin-top: 4px;">Memories Due for SM-2 Recall Review</div>
+      </div>
+
+      <div class="review-card-container">
+        <!-- Review Card View -->
+        <div id="active-review-card" class="flashcard hidden">
+          <div class="flashcard-header" id="review-card-meta">Memory</div>
+          <div class="flashcard-title" id="review-card-title">Title</div>
+          <a href="#" target="_blank" class="flashcard-url" id="review-card-url">URL</a>
+
+          <!-- Prompt to reveal content -->
+          <div id="review-prompt-reveal" class="flashcard-prompt-reveal">
+            <div>👁️ Click to Reveal Details & Rate Recall</div>
+          </div>
+
+          <!-- Decrypted full content (hidden until click) -->
+          <div id="review-content-body" class="flashcard-body hidden">
+            <!-- Text Content goes here -->
+          </div>
+
+          <!-- Quality buttons (hidden until click) -->
+          <div id="review-rating-actions" class="rating-container hidden">
+            <button class="rating-btn" data-val="0"><span> blackout </span>0</button>
+            <button class="rating-btn" data-val="1"><span> incorrect </span>1</button>
+            <button class="rating-btn" data-val="2"><span> hard </span>2</button>
+            <button class="rating-btn" data-val="3"><span> medium </span>3</button>
+            <button class="rating-btn" data-val="4"><span> good </span>4</button>
+            <button class="rating-btn" data-val="5"><span> perfect </span>5</button>
+          </div>
+        </div>
+
+        <!-- Empty State -->
+        <div id="empty-review-state" style="text-align: center; padding: 40px 20px; color: var(--text-muted);">
+          <div style="font-size: 40px; margin-bottom: 12px;">🎉</div>
+          <div style="font-weight: 600; color: var(--text); margin-bottom: 6px;">Zero Cards Left</div>
+          <div style="font-size: 12px;">You've completed your recall repetitions for today!</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Settings Panel -->
+    <div id="settings-panel" class="panel hidden">
+      <!-- Sync Status -->
+      <div class="settings-section">
+        <div class="settings-section-title">
+          <svg style="width: 16px; height: 16px; fill: currentColor;" viewBox="0 0 24 24">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+          </svg>
+          Device Cloud Synchronization
+        </div>
+        <div class="settings-row">
+          <div>
+            <div class="settings-label">User Account</div>
+            <div class="settings-desc" id="settings-email-label">Not logged in</div>
+          </div>
+          <button id="logout-btn" class="btn-danger">Sign Out</button>
+        </div>
+        <div class="settings-row">
+          <div>
+            <div class="settings-label">Offline Payload Cache</div>
+            <div class="settings-desc">Queued client-encrypted captures</div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span id="offline-queue-badge" class="badge">0</span>
+            <button id="force-sync-btn" class="btn-secondary">Sync Now</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Controls -->
+      <div class="settings-section">
+        <div class="settings-section-title">
+          <svg style="width: 16px; height: 16px; fill: currentColor;" viewBox="0 0 24 24">
+            <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
+          </svg>
+          Capture Options
+        </div>
+        <div class="settings-row">
+          <div>
+            <div class="settings-label">Passive Capture</div>
+            <div class="settings-desc">Save visit pages automatically</div>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="toggle-capture" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div class="settings-row">
+          <div>
+            <div class="settings-label">Clear Local Cache</div>
+            <div class="settings-desc">Wipe all IndexedDB memories on this device</div>
+          </div>
+          <button id="clear-local-db-btn" class="btn-danger">Clear DB</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs Bar -->
+    <nav class="tab-bar">
+      <button id="search-tab-btn" class="tab-btn active">
+        <svg viewBox="0 0 24 24">
+          <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+        </svg>
+        <span>Search</span>
+      </button>
+      <button id="review-tab-btn" class="tab-btn">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+        </svg>
+        <span>Review</span>
+      </button>
+      <button id="settings-tab-btn" class="tab-btn">
+        <svg viewBox="0 0 24 24">
+          <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
+        </svg>
+        <span>Settings</span>
+      </button>
+    </nav>
+  </div>
+
+  <script src="dist/popup.js" type="module"></script>
+</body>
+</html>

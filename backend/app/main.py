@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.database import engine, Base
 from app.routers import auth, memories
+from app.config import settings
 from contextlib import asynccontextmanager
 from sqlalchemy import text
 
@@ -25,7 +26,7 @@ app = FastAPI(
 # CORS configuration supporting extension context calls
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # In production, pin this to the specific Chrome Extension ID
+    allow_origins=settings.CORS_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

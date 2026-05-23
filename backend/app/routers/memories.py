@@ -55,6 +55,16 @@ async def save_memory(
     return new_memory
 
 
+@router.get("", response_model=List[MemoryResponse])
+async def get_all_memories(
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    stmt = select(Memory).where(Memory.user_id == current_user.id).order_by(desc(Memory.created_at))
+    result = await db.execute(stmt)
+    return result.scalars().all()
+
+
 @router.post("/search", response_model=List[MemorySearchResult])
 async def search_memories(
     search_req: MemorySearchRequest,
