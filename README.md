@@ -1,4 +1,4 @@
-# 🧠 Smarana v2 — Privacy-Preserving Intelligent Second Brain
+# 🧠 Smarana — Privacy-Preserving Intelligent Second Brain
 
 **Smarana v2** is a secure, local-first browser companion designed to automatically capture, encrypt, rank, and help you retain everything you read on the web. It integrates **local-first keyword search (IndexedDB)** with **semantic vector embeddings (FastAPI + pgvector)** using **Reciprocal Rank Fusion (RRF)**, all while maintaining absolute privacy via **zero-knowledge client-side encryption**.
 
